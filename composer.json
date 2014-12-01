@@ -19,8 +19,9 @@
   },
   "require": {
     "php": ">=5.3",
-    "composer/installers": "~1.0",
-    "usabilitydynamics/lib-wp-bootstrap": "*"
+    "usabilitydynamics/lib-wp-bootstrap": "*",
+    "usabilitydynamics/lib-maestro-conference-php-client": "*",
+    "usabilitydynamics/wp-meta-box": "*"
   },
   "require-dev": {
     "usabilitydynamics/lib-wp-phpunit": "~0.2",

@@ -1,0 +1,147 @@
+[
+    {
+        "name": "usabilitydynamics/lib-utility",
+        "version": "0.3.6",
+        "version_normalized": "0.3.6.0",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:usabilitydynamics/lib-utility",
+            "reference": "0.3.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/usabilitydynamics/lib-utility/archive/0.3.6.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.1.*"
+        },
+        "type": "library",
+        "extra": {
+            "installer-name": "lib-utility",
+            "component": {
+                "name": "utility",
+                "scripts": [
+                    "scripts/*.js"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "lib"
+            ]
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Andy Potanin",
+                "email": "andy.potanin@usabilitydynamics.com",
+                "homepage": "http://usabilitydynamics.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Maxim Peshkov",
+                "email": "maxim.peshkov@usabilitydynamics.com",
+                "homepage": "http://usabilitydynamics.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anton Korotkov",
+                "email": "anton.korotkov@usabilitydynamics.com",
+                "homepage": "http://usabilitydynamics.com",
+                "role": "Developer"
+            }
+        ],
+        "keywords": [
+            "job",
+            "process",
+            "utility"
+        ]
+    },
+    {
+        "name": "usabilitydynamics/lib-wp-bootstrap",
+        "version": "master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:usabilitydynamics/lib-wp-bootstrap",
+            "reference": "master"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/usabilitydynamics/lib-wp-bootstrap/archive/master.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "php": ">=5.3",
+            "usabilitydynamics/lib-utility": "~0.3"
+        },
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "lib/classes"
+            ]
+        },
+        "license": [
+            "MIT"
+        ],
+        "description": "Wordpress bootstrap library created by UsabilityDynamics",
+        "homepage": "https://github.com/usabilitydynamics/lib-wp-bootstrap",
+        "keywords": [
+            "wordpress"
+        ]
+    },
+    {
+        "name": "usabilitydynamics/wp-meta-box",
+        "version": "master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:usabilitydynamics/wp-meta-box",
+            "reference": "master"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/usabilitydynamics/wp-meta-box/archive/master.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "wordpress-plugin",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "inc/fields",
+                "inc/common.php",
+                "inc/field.php",
+                "inc/helpers.php",
+                "inc/meta-box.php"
+            ]
+        },
+        "license": [
+            "GPLv2"
+        ],
+        "authors": [
+            {
+                "name": "Tran Ngoc Tuan Anh",
+                "email": "rilwis@gmail.com",
+                "homepage": "http://www.deluxeblogtips.com/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Easily create custom meta boxes in WordPress.",
+        "homepage": "http://www.deluxeblogtips.com/meta-box/",
+        "keywords": [
+            "meta-box",
+            "select2",
+            "ui",
+            "wordpress",
+            "wp-admin"
+        ]
+    }
+]
