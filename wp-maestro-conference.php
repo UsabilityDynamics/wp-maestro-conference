@@ -92,3 +92,5 @@ if( ud_check_wp_maestro_conference() ) {
   //** Initialize. */
   ud_get_wp_maestro_conference();
 }
+
+ud_get_wp_maestro_conference()->get_conference( 732, array( 'shit' => 'black' ) );

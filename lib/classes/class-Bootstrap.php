@@ -81,6 +81,20 @@ namespace UsabilityDynamics\MaestroConference {
         }
         
       }
+      
+      /**
+       * Determine if Utility class contains missed function
+       * in other case, just return NULL to prevent ERRORS
+       * 
+       * @author peshkov@UD
+       */
+      public function __call( $name, $arguments ) {
+        if( is_callable( array( "\UsabilityDynamics\MaestroConference\Utility", $name ) ) ) {
+          return call_user_func_array( array( "\UsabilityDynamics\MaestroConference\Utility", $name ), $arguments );
+        } else {
+          return NULL;
+        }
+      }
 
     }
 
