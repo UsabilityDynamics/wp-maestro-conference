@@ -4,11 +4,17 @@
  *
  * @since 1.0.0
  */
-namespace UsabilityDynamics\WP_MC {
+namespace UsabilityDynamics\MaestroConference {
 
-  if( !class_exists( 'UsabilityDynamics\WP_MC\Bootstrap' ) ) {
+  if( !class_exists( 'UsabilityDynamics\MaestroConference\Bootstrap' ) ) {
 
     final class Bootstrap extends \UsabilityDynamics\WP\Bootstrap_Plugin {
+      
+      /**
+       *
+       *
+       */
+      public $core = NULL;
       
       /**
        * Singleton Instance Reference.
@@ -25,7 +31,9 @@ namespace UsabilityDynamics\WP_MC {
        */
       public function init() {
         
-        //** Here is we go. */
+        $this->define_settings();
+        
+        $this->core = new Core();
         
       }
       
@@ -40,6 +48,39 @@ namespace UsabilityDynamics\WP_MC {
        *
        */
       public function deactivate() {}
+      
+      /**
+       * Define Plugin Settings
+       * 
+       * Examples:
+       * 
+       * to get text domain:
+       * $this->get( 'domain' );
+       * 
+       * to get Maestro Conference customer ID:
+       * $this->get( 'api.customer' );
+       * 
+       * to set Maestro Conference customer ID:
+       * $this->set( 'api.customer', 'johndoe' );
+       */
+      private function define_settings() {
+        $this->settings = new \UsabilityDynamics\Settings( array(
+          'key'  => 'maconf_settings',
+          'store'  => 'options',
+          'data' => array(
+            'name' => $this->name,
+            'version' => $this->args[ 'version' ],
+            'domain' => $this->domain,
+          )
+        ) );
+        
+        /* Probably add default settings */
+        $default = $this->get_schema( 'extra.schemas.settings' );
+        if( is_array( $default ) ) {
+          $this->set( \UsabilityDynamics\Utility::extend( $default, $this->get() ) );  
+        }
+        
+      }
 
     }
 

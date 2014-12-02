@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'WPModel' => array($vendorDir . '/hanamura/wp-model/src'),
-    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
 );

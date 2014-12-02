@@ -24,8 +24,7 @@
     "usabilitydynamics/lib-wp-bootstrap": "*",
     "usabilitydynamics/lib-wp-shortcode": "0.1.0",
     "usabilitydynamics/lib-ui": "0.2.1",
-    "usabilitydynamics/lib-maestro-conference-php-client": "*",
-    "usabilitydynamics/wp-meta-box": "4.3.11"
+    "usabilitydynamics/lib-maestro-conference-php-client": "*"
   },
   "require-dev": {
     "usabilitydynamics/lib-wp-phpunit": "~0.2",
@@ -50,11 +49,157 @@
     "schemas": {
       "dependencies" : {
         "modules": {},
-        "plugins": []
+        "plugins": [
+          {
+            "name": "Meta Box",
+            "slug": "meta-box",
+            "required": true
+          }
+        ]
       },
-      "licenses" : {
-        "client" : false,
-        "product" : false
+      "model": {
+        "types": {
+          "maestro_conference": {
+            "key": "mconference",
+            "data": {
+              "capability_type": "page",
+              "label": "Conferences",
+              "labels": {
+                "add_new": "New Conference",
+                "add_new_item": "Create New Conference",
+                "all_items": "All Conferences",
+                "edit_item": "Edit Conference",
+                "menu_name": "Conferences",
+                "name": "Conferences",
+                "not_found": "No Conferences found.",
+                "not_found_in_trash": "No Conferences in Trash",
+                "search_items": "Search Conference",
+                "singular_name": "Conferences",
+                "update_item": "Update Conference",
+                "view_item": "View Conference"
+              },
+              "description": "Maestro Conferences",
+              "exclude_from_search": false,
+              "has_archive": true,
+              "hierarchical": false,
+              "menu_icon": false,
+              "menu_position": 3,
+              "public": true,
+              "publicly_queryable": true,
+              "show_in_admin_bar": true,
+              "show_in_menu": true,
+              "show_in_nav_menus": true,
+              "show_ui": true,
+              "supports": [
+                "title",
+                "editor",
+                "excerpt"
+              ],
+              "can_export": true
+            },
+            "taxonomies": [
+              "conference_tags"
+            ],
+            "meta": {
+              "maestro_conference_global_settings": {
+                "fields": [
+                  "uid",
+                  "status",
+                  "scheduledStartTime",
+                  "scheduledEndTime"
+                ]
+              }
+            }
+          }
+        },
+        "meta": {
+          "uid": {
+            "name": "Unique ID"
+          },
+          "status": {
+            "name": "Status",
+            "desc": "Status of conference",
+            "type": "select",
+            "options": {
+              "SCHED": "Scheduled",
+              "ACTIVE": "Active",
+              "IDLE": "IDLE",
+              "CLOSED": "Closed",
+              "CANCEL": "Canceled"
+            }
+          },
+          "scheduledStartTime": {
+            "name": "Start Time",
+            "desc": "Scheduled starting time of meeting",
+            "type": "datetime"
+          },
+          "scheduledEndTime": {
+            "name": "End Time",
+            "desc": "Scheduled ending time of meeting",
+            "type": "datetime"
+          }
+        }
+      },
+      "settings": {
+        "api": {
+          "customer": "",
+          "auth_key": "",
+          "sync_time": "12"
+        },
+        "conference": {
+          "reg_is_enabled": "true",
+          "reg_is_disabled_for_nonlogged_users": "true",
+          "user_can_cancel_reg": "true",
+          "cancel_reg_max_time": "24"
+        }
+      },
+      "ui": {
+        "configuration": {
+          "secondary_menu": {
+            "page_title": "Maestro Conferences Settings",
+            "menu_title": "Settings",
+            "parent_slug": "edit.php?post_type=maestro_conference",
+            "menu_slug": "maestro_conferences_settings"
+          }
+        },
+        "menu": {
+          "api": {
+            "id": "api",
+            "name": "API",
+            "desc": "Maestro Conference API Credentials"
+          }
+        },
+        "sections": {
+          "credentials": {
+            "id": "credentials",
+            "name": "Credentials",
+            "menu": "api"
+          },
+          "sync": {
+            "id": "sync",
+            "name": "Synchronization",
+            "desc": "Cron Job setup",
+            "menu": "api"
+          }
+        },
+        "fields": [
+          {
+            "id": "api.customer",
+            "name": "Customer",
+            "section": "credentials"
+          },
+          {
+            "id": "api.auth_key",
+            "name": "Authorization Key",
+            "section": "credentials"
+          },
+          {
+            "id": "api.sync_time",
+            "name": "Cron Schedule",
+            "desc": "How often we should synchronize WordPress Conferences with Maestro Conference service",
+            "section": "sync"
+          }
+        ]
       }
     }
   }

@@ -21,7 +21,7 @@ if( !function_exists( 'ud_get_wp_maestro_conference' ) ) {
    * @since 1.0.0
    */
   function ud_get_wp_maestro_conference( $key = false, $default = null ) {
-    $instance = \UsabilityDynamics\WP_MC\Bootstrap::get_instance();
+    $instance = \UsabilityDynamics\MaestroConference\Bootstrap::get_instance();
     return $key ? $instance->get( $key, $default ) : $instance;
   }
 
@@ -59,7 +59,7 @@ if( !function_exists( 'ud_check_wp_maestro_conference' ) ) {
         throw new Exception( sprintf( __( 'Distributive is broken. %s file is missed. Try to remove and upload plugin again.', 'mconference' ), dirname( __FILE__ ) . '/vendor/autoload.php' ) );
       }
       //** Be sure our Bootstrap class exists */
-      if( !class_exists( '\UsabilityDynamics\WP_MC\Bootstrap' ) ) {
+      if( !class_exists( '\UsabilityDynamics\MaestroConference\Bootstrap' ) ) {
         throw new Exception( __( 'Distributive is broken. Plugin loader is not available. Try to remove and upload plugin again.', 'mconference' ) );
       }
     } catch( Exception $e ) {
