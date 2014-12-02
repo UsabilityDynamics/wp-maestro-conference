@@ -1,0 +1,28 @@
+{
+  "name": "usabilitydynamics/lib-maestroconference-php-client",
+  "type": "library",
+  "description": "MaestroConference API PHP Client",
+  "author": {
+    "name": "Usability Dynamics",
+    "url": "http://UsabilityDynamics.com"
+  },
+  "license": "GPL-2.0",
+  "tags": [ "maestroconference", "conference", "api", "client" ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://repository.usabilitydynamics.com"
+    },
+    {
+      "type": "composer",
+      "url": "http://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=5.3"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "classmap": "lib/classes"
+  }
+}

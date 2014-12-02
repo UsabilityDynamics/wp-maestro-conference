@@ -19,9 +19,13 @@
   },
   "require": {
     "php": ">=5.3",
+    "usabilitydynamics/lib-model": "0.4.0",
+    "usabilitydynamics/lib-settings": "0.2.3",
     "usabilitydynamics/lib-wp-bootstrap": "*",
+    "usabilitydynamics/lib-wp-shortcode": "0.1.0",
+    "usabilitydynamics/lib-ui": "0.2.1",
     "usabilitydynamics/lib-maestro-conference-php-client": "*",
-    "usabilitydynamics/wp-meta-box": "*"
+    "usabilitydynamics/wp-meta-box": "4.3.11"
   },
   "require-dev": {
     "usabilitydynamics/lib-wp-phpunit": "~0.2",
