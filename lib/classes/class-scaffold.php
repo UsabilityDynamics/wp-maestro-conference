@@ -23,7 +23,6 @@ namespace UsabilityDynamics\MaestroConference {
       /**
        * Bootstrap Singleton object
        *
-       * @var object DiscoDonniePresents\Eventbrite\Bootstrap
        */
       public $instance = NULL;
       

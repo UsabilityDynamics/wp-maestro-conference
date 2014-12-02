@@ -33,7 +33,6 @@ namespace UsabilityDynamics\MaestroConference {
 
         if ( is_object ( $the_conference ) ) {
           $conference_id = absint( $the_conference->ID );
-          $post_type  = $the_conference->post_type;
         }
 
         $classname = false;
@@ -43,7 +42,7 @@ namespace UsabilityDynamics\MaestroConference {
         }
 
         /* Filter classname so that the class can be overridden if extended. */
-        $classname = apply_filters( 'woocommerce_product_class', $classname, $product_type, $post_type, $product_id );
+        $classname = apply_filters( 'woocommerce_product_class', $classname, $status, $product_id );
 
         if ( !$classname || !class_exists( $classname ) ) {
           $classname = '\UsabilityDynamics\MaestroConference\Conference';

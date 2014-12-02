@@ -11,10 +11,18 @@ namespace UsabilityDynamics\MaestroConference {
     final class Bootstrap extends \UsabilityDynamics\WP\Bootstrap_Plugin {
       
       /**
+       * Core
        *
-       *
+       * @var object \UsabilityDynamics\MaestroConference\Core
        */
       public $core = NULL;
+      
+      /**
+       * API Client
+       *
+       * @var object \UsabilityDynamics\MaestroConference\Client
+       */
+      public $client = NULL;
       
       /**
        * Singleton Instance Reference.
@@ -34,6 +42,15 @@ namespace UsabilityDynamics\MaestroConference {
         $this->define_settings();
         
         $this->core = new Core();
+        
+        /**
+         * Init API CLient
+         */
+        $customer = $this->get( 'api.customer' );
+        $auth_key = $this->get( 'api.auth_key' );
+        if( !empty( $customer ) && !empty( $auth_key ) ) {
+          $this->client = new Client( $customer, $auth_key );
+        }
         
       }
       

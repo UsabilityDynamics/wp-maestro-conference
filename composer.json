@@ -60,7 +60,7 @@
       "model": {
         "types": {
           "maestro_conference": {
-            "key": "mconference",
+            "key": "maestro_conference",
             "data": {
               "capability_type": "page",
               "label": "Conferences",
@@ -167,6 +167,11 @@
             "id": "api",
             "name": "API",
             "desc": "Maestro Conference API Credentials"
+          },
+          "conference": {
+            "id": "conference",
+            "name": "Conference",
+            "desc": "General Conference Post Type Settings"
           }
         },
         "sections": {
@@ -180,6 +185,11 @@
             "name": "Synchronization",
             "desc": "Cron Job setup",
             "menu": "api"
+          },
+          "registration": {
+            "id": "registration",
+            "name": "Registration",
+            "menu": "conference"
           }
         },
         "fields": [

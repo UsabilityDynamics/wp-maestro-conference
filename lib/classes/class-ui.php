@@ -18,21 +18,6 @@ namespace UsabilityDynamics\MaestroConference {
     class UI extends Scaffold {
       
       /**
-       *
-       */
-      public $screens = array();
-      
-      /**
-       *
-       */
-      public $errors = array();
-      
-      /**
-       *
-       */
-      public $messages = array();
-
-      /**
        * Constructor
        *
        * @author peshkov@UD

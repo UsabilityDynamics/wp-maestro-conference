@@ -10,6 +10,7 @@ return array(
     'UsabilityDynamics\\Loader' => $vendorDir . '/usabilitydynamics/lib-utility/lib/class-loader.php',
     'UsabilityDynamics\\MC\\Client' => $vendorDir . '/usabilitydynamics/lib-maestro-conference-php-client/lib/classes/class-client.php',
     'UsabilityDynamics\\MaestroConference\\Bootstrap' => $baseDir . '/lib/classes/class-bootstrap.php',
+    'UsabilityDynamics\\MaestroConference\\Client' => $baseDir . '/lib/classes/class-client.php',
     'UsabilityDynamics\\MaestroConference\\Conference' => $baseDir . '/lib/classes/class-conference.php',
     'UsabilityDynamics\\MaestroConference\\Conference_Factory' => $baseDir . '/lib/classes/class-conference-factory.php',
     'UsabilityDynamics\\MaestroConference\\Core' => $baseDir . '/lib/classes/class-core.php',
