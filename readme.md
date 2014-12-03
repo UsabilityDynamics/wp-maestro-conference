@@ -11,5 +11,5 @@ Maestro Conferences Manager
 [![Scrutinizer Quality](http://img.shields.io/scrutinizer/g/usabilitydynamics/wp-maestro-conference.svg)](https://scrutinizer-ci.com/g/usabilitydynamics/wp-maestro-conference)
 [![Scrutinizer Coverage](http://img.shields.io/scrutinizer/coverage/g/usabilitydynamics/wp-maestro-conference.svg)](https://scrutinizer-ci.com/g/usabilitydynamics/wp-maestro-conference)
 [![Packagist Vesion](http://img.shields.io/packagist/v/usabilitydynamics/wp-maestro-conference.svg)](https://packagist.org/packages/usabilitydynamics/wp-maestro-conference)
-[![CircleCI](https://circleci.com/gh/usabilitydynamics/wp-maestro-conference.png)](https://circleci.com/gh/usabilitydynamics/wp-maestro-conference)
+[![Circle CI](https://circleci.com/gh/UsabilityDynamics/wp-maestro-conference.svg?style=svg&circle-token=f510c7a60c36c20496b5959ce5889f8fbab3d25a)](https://circleci.com/gh/UsabilityDynamics/wp-maestro-conference)
 ***
