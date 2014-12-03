@@ -184,7 +184,7 @@ namespace UsabilityDynamics\Model {
         usort( self::$data, create_function( '$a,$b', 'if ($a[\'priority\'] == $b[\'priority\']) { return 0; } return ($a[\'priority\'] < $b[\'priority\']) ? 1 : -1;' ) );
         
         self::$schema = array();
-        
+
         foreach( self::$data as $d ) {
           // Clear our schema data.
           $d = array(
