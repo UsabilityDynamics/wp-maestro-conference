@@ -22,7 +22,7 @@ namespace UsabilityDynamics\MaestroConference {
        * @author peshkov@UD
        */
       public function __construct( $customer, $auth_key ) {
-        parent::__construct( $customer, $key );
+        parent::__construct( $customer, $auth_key );
         //** Get our Bootstrap Singleton object */
         $this->instance = ud_get_wp_maestro_conference();
       }
