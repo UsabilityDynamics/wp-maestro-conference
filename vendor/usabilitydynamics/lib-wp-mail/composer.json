@@ -1,0 +1,29 @@
+{
+  "name": "usabilitydynamics/lib-wp-mail",
+  "type": "library",
+  "description": "WP Mail Handler for WP-CRM Notifications",
+  "author": {
+    "name": "Usability Dynamics",
+    "url": "http://UsabilityDynamics.com"
+  },
+  "license": "GPL-2.0",
+  "tags": [ "crm", "wordpress", "mail" ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://repository.usabilitydynamics.com"
+    },
+    {
+      "type": "composer",
+      "url": "http://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "usabilitydynamics/lib-utility": "0.3.6"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "classmap": "lib/classes"
+  }
+}

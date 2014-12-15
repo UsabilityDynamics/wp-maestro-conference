@@ -324,41 +324,36 @@
         ]
     },
     {
-        "name": "usabilitydynamics/lib-maestro-conference-php-client",
+        "name": "usabilitydynamics/lib-wp-mail",
         "version": "master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "git@github.com:usabilitydynamics/lib-maestro-conference-php-client",
+            "url": "git@github.com:UsabilityDynamics/lib-wp-mail",
             "reference": "master"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/usabilitydynamics/lib-maestro-conference-php-client/archive/master.zip",
+            "url": "https://github.com/UsabilityDynamics/lib-wp-mail/archive/master.zip",
             "reference": null,
             "shasum": null
         },
         "require": {
-            "php": ">=5.3"
+            "php": ">=5.3",
+            "usabilitydynamics/lib-utility": "0.3.6"
         },
         "type": "library",
+        "extra": {
+            "installer-name": "lib-wp-mail"
+        },
         "installation-source": "source",
         "autoload": {
-            "classmap": [
-                "lib/classes"
-            ]
+            "classmap": "lib/classes"
         },
         "license": [
-            "GPLv2"
+            "GPL-2.0"
         ],
-        "description": "Maestro Conference API PHP Client",
-        "homepage": "https://github.com/usabilitydynamics/lib-maestro-conference-php-client",
-        "keywords": [
-            "api",
-            "client",
-            "conference",
-            "maestro"
-        ]
+        "description": "WP Mail Handler for WP-CRM Notifications"
     },
     {
         "name": "usabilitydynamics/lib-wp-bootstrap",
@@ -393,6 +388,43 @@
         "homepage": "https://github.com/usabilitydynamics/lib-wp-bootstrap",
         "keywords": [
             "wordpress"
+        ]
+    },
+    {
+        "name": "usabilitydynamics/lib-maestro-conference-php-client",
+        "version": "master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:usabilitydynamics/lib-maestro-conference-php-client",
+            "reference": "master"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/usabilitydynamics/lib-maestro-conference-php-client/archive/master.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "php": ">=5.3"
+        },
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "lib/classes"
+            ]
+        },
+        "license": [
+            "GPLv2"
+        ],
+        "description": "Maestro Conference API PHP Client",
+        "homepage": "https://github.com/usabilitydynamics/lib-maestro-conference-php-client",
+        "keywords": [
+            "api",
+            "client",
+            "conference",
+            "maestro"
         ]
     }
 ]

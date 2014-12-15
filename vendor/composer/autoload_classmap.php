@@ -15,6 +15,7 @@ return array(
     'UsabilityDynamics\\MaestroConference\\Conference_Factory' => $baseDir . '/lib/classes/class-conference-factory.php',
     'UsabilityDynamics\\MaestroConference\\Core' => $baseDir . '/lib/classes/class-core.php',
     'UsabilityDynamics\\MaestroConference\\Scaffold' => $baseDir . '/lib/classes/class-scaffold.php',
+    'UsabilityDynamics\\MaestroConference\\Shortcode' => $baseDir . '/lib/classes/class-shortcode.php',
     'UsabilityDynamics\\MaestroConference\\UI' => $baseDir . '/lib/classes/class-ui.php',
     'UsabilityDynamics\\MaestroConference\\Utility' => $baseDir . '/lib/classes/class-utility.php',
     'UsabilityDynamics\\Model' => $vendorDir . '/usabilitydynamics/lib-model/lib/class-model.php',
