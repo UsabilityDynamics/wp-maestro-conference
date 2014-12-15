@@ -44,7 +44,7 @@ namespace UsabilityDynamics\MaestroConference {
         if( is_array( $data ) ) {
           extract( $data );
         }
-        $path = dirname( __DIR__ ) . '/static/views/' . $name . '.php';
+        $path = $this->instance->path( '/static/views/' . $name . '.php', 'dir' );
         if( file_exists( $path ) ) {
           include( $path );
         }

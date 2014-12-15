@@ -101,42 +101,44 @@
               "conference_tags"
             ],
             "meta": {
-              "maestro_conference_global_settings": {
-                "fields": [
-                  "uid",
-                  "status",
-                  "scheduledStartTime",
-                  "scheduledEndTime"
-                ]
+              "admin_information": {
+                  "fields": [
+                      "mc_status",
+                      "mc_scheduledStartDate",
+                      "mc_isPaid"
+                  ]
               }
             }
           }
         },
         "meta": {
-          "uid": {
-            "name": "Unique ID"
-          },
-          "status": {
+          "mc_status": {
             "name": "Status",
             "desc": "Status of conference",
             "type": "select",
             "options": {
-              "SCHED": "Scheduled",
-              "ACTIVE": "Active",
-              "IDLE": "IDLE",
-              "CLOSED": "Closed",
-              "CANCEL": "Canceled"
+              "active": "Active",
+              "closed": "Closed"
             }
           },
-          "scheduledStartTime": {
-            "name": "Start Time",
-            "desc": "Scheduled starting time of meeting",
-            "type": "datetime"
+          "mc_isPaid": {
+            "name": "Paid",
+            "desc": "Is paid conference",
+            "type": "select",
+            "options": {
+              "paid": "Paid",
+              "free": "Free"
+            }
           },
-          "scheduledEndTime": {
-            "name": "End Time",
-            "desc": "Scheduled ending time of meeting",
-            "type": "datetime"
+          "mc_scheduledStartDate": {
+            "name": "Start Date",
+            "desc": "Scheduled starting date of meeting",
+            "type": "datetime",
+            "js_options": [
+                {
+                "minDate": "0"
+                }
+            ]
           }
         }
       },
@@ -144,7 +146,7 @@
         "api": {
           "customer": "",
           "auth_key": "",
-          "sync_time": "12"
+          "conference_uid": ""
         },
         "conference": {
           "reg_is_enabled": "true",
@@ -156,8 +158,8 @@
       "ui": {
         "configuration": {
           "secondary_menu": {
-            "page_title": "Maestro Conferences Settings",
-            "menu_title": "Settings",
+            "page_title": "l10n.maestro_conference_page_title",
+            "menu_title": "l10n.maestro_conference_settings",
             "parent_slug": "edit.php?post_type=maestro_conference",
             "menu_slug": "maestro_conferences_settings"
           }
@@ -165,49 +167,57 @@
         "menu": {
           "api": {
             "id": "api",
-            "name": "API",
-            "desc": "Maestro Conference API Credentials"
+            "name": "l10n.mc_api",
+            "desc": "l10n.mc_api_credentials"
+          },
+          "meta": {
+            "id": "meta",
+            "name": "l10n.mc_meta_fields",
+            "desc": "l10n.mc_meta_fields_availability"
           },
           "conference": {
             "id": "conference",
-            "name": "Conference",
-            "desc": "General Conference Post Type Settings"
+            "name": "l10n.mc_conference",
+            "desc": "l10n.mc_general_pt_setting"
           }
         },
         "sections": {
           "credentials": {
             "id": "credentials",
-            "name": "Credentials",
-            "menu": "api"
-          },
-          "sync": {
-            "id": "sync",
-            "name": "Synchronization",
-            "desc": "Cron Job setup",
+            "name": "l10n.mc_credentials",
             "menu": "api"
           },
           "registration": {
             "id": "registration",
-            "name": "Registration",
+            "name": "l10n.mc_registration",
             "menu": "conference"
+          },
+          "pre_registration": {
+            "id": "pre_registration",
+            "name": "l10n.mc_pre_registration",
+            "menu": "conference"
+          },
+          "meta_fields": {
+            "id": "meta_fields",
+            "name": "l10n.mc_meta_fields_availability",
+            "menu": "meta"
           }
         },
         "fields": [
           {
             "id": "api.customer",
-            "name": "Customer",
+            "name": "l10n.mc_customer_uid",
             "section": "credentials"
           },
           {
             "id": "api.auth_key",
-            "name": "Authorization Key",
+            "name": "l10n.mc_security_token",
             "section": "credentials"
           },
           {
-            "id": "api.sync_time",
-            "name": "Cron Schedule",
-            "desc": "How often we should synchronize WordPress Conferences with Maestro Conference service",
-            "section": "sync"
+            "id": "api.conference_uid",
+            "name": "l10n.mc_conference_unique_id",
+            "section": "credentials"
           }
         ]
       }
