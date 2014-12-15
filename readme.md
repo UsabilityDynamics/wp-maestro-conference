@@ -1,4 +1,4 @@
-### WP Maestro Conference Plugin
+### WP Maestro Conference Plugin 
 
 Maestro Conferences Manager
 
