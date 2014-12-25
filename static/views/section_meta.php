@@ -5,7 +5,9 @@
 ?>
 <div class="inside">
     <div class="uisf-field uisf-checkbox-wrapper"><div class="uisf-label">
-            <label for="meta_fields_show_non_authorized">show/hide for non-authorized users</label>
+            <label for="meta_fields_show_non_authorized">
+                <?php _e('show/hide for non-authorized users', ud_get_wp_maestro_conference('domain')); ?>                
+            </label>
         </div>
         <div class="uisf-input">
             <input type='hidden' name='meta_fields|show_non_authorized' value='0' />
@@ -14,7 +16,9 @@
     </div>          
     <div class="uisf-field uisf-checkbox-wrapper">
         <div class="uisf-label">
-            <label for="meta_fields_show_non_participant">show/hide for non-participant</label>
+            <label for="meta_fields_show_non_participant">
+                <?php _e('show/hide for non-participant', ud_get_wp_maestro_conference('domain')); ?>
+            </label>
         </div>
         <div class="uisf-input">
             <input type='hidden' name='meta_fields|show_non_participant' value='0' />

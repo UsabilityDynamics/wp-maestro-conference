@@ -1,12 +1,14 @@
 <?php
+
 /**
  * Bootstrap
  *
  * @since 1.0.0
  */
+
 namespace UsabilityDynamics\MaestroConference {
 
-  if( !class_exists( 'UsabilityDynamics\MaestroConference\Bootstrap' ) ) {
+  if (!class_exists('UsabilityDynamics\MaestroConference\Bootstrap')) {
 
     final class Bootstrap extends \UsabilityDynamics\WP\Bootstrap_Plugin {
 
@@ -44,15 +46,15 @@ namespace UsabilityDynamics\MaestroConference {
         /**
          * Init API CLient
          */
-        $customer = $this->get( 'api.customer' );
-        $auth_key = $this->get( 'api.auth_key' );
-        if( !empty( $customer ) && !empty( $auth_key ) ) {
-          $this->client = new Client( $customer, $auth_key );
+        $customer = $this->get('api.customer');
+        $auth_key = $this->get('api.auth_key');
+        if (!empty($customer) && !empty($auth_key)) {
+          $this->client = new Client($customer, $auth_key);
         }
-		$this->core = new Core();
+        $this->core = new Core();
       }
 
-	  /**
+      /**
        * Return localization's list.
        *
        * Example:
@@ -70,36 +72,40 @@ namespace UsabilityDynamics\MaestroConference {
        * @return array
        */
       public function get_localization() {
-        return apply_filters( 'wp_maestro_conference_localization', array(
-          'maestro_conference_page_title' => __( 'Maestro Conferences Settings', $this->domain ),
-          'maestro_conference_settings'	  => __( 'Settings', $this->domain ),
-          'mc_api_credentials'			  => __( 'Maestro Conference API Credentials', $this->domain ),
-          'mc_api'						  => __( 'API', $this->domain ),
-          'mc_meta_fields'				  => __( 'Meta Fields', $this->domain ),
-          'mc_meta_fields_availability'	  => __( 'Meta Fields Availability', $this->domain ),
-          'mc_conference'				  => __( 'Conference', $this->domain ),
-          'mc_conferences'				  => __( 'Conferences', $this->domain ),
-          'mc_general_pt_setting'		  => __( 'General Conference Post Type Settings', $this->domain ),
-          'mc_credentials'				  => __( 'Credentials', $this->domain ),
-          'mc_registration'				  => __( "Registration", $this->domain ),
-          'mc_pre_registration'			  => __( 'Pre-registration', $this->domain ),
-          'mc_customer_uid'				  => __( 'Customer UID', $this->domain ),
-          'mc_security_token'             => __( 'Security Token', $this->domain ),
-          'mc_conference_unique_id'       => __( 'Conference unique IDe', $this->domain )
-        ) );
+        return apply_filters('wp_maestro_conference_localization', array(
+            'maestro_conference_page_title' => __('Maestro Conferences Settings', $this->domain),
+            'maestro_conference_settings' => __('Settings', $this->domain),
+            'mc_api_credentials' => __('Maestro Conference API Credentials', $this->domain),
+            'mc_api' => __('API', $this->domain),
+            'mc_meta_fields' => __('Meta Fields', $this->domain),
+            'mc_meta_fields_availability' => __('Meta Fields Availability', $this->domain),
+            'mc_conference' => __('Conference', $this->domain),
+            'mc_conferences' => __('Conferences', $this->domain),
+            'mc_general_pt_setting' => __('General Conference Post Type Settings', $this->domain),
+            'mc_credentials' => __('Credentials', $this->domain),
+            'mc_registration' => __("Registration", $this->domain),
+            'mc_pre_registration' => __('Pre-registration', $this->domain),
+            'mc_customer_uid' => __('Customer UID', $this->domain),
+            'mc_security_token' => __('Security Token', $this->domain),
+            'mc_conference_unique_id' => __('Conference unique ID', $this->domain)
+                ));
       }
 
       /**
        * Plugin Activation
        *
        */
-      public function activate() {}
+      public function activate() {
+
+      }
 
       /**
        * Plugin Deactivation
        *
        */
-      public function deactivate() {}
+      public function deactivate() {
+
+      }
 
       /**
        * Define Plugin Settings
@@ -116,23 +122,23 @@ namespace UsabilityDynamics\MaestroConference {
        * $this->set( 'api.customer', 'johndoe' );
        */
       private function define_settings() {
-        $this->settings = new \UsabilityDynamics\Settings( array(
-          'key'  => 'maconf_settings',
-          'store'  => 'options',
-          'data' => array(
-            'name' => $this->name,
-            'version' => $this->args[ 'version' ],
-            'domain' => $this->domain,
-			'prefix' => 'mc_',
-          )
-        ) );
+        $this->settings = new \UsabilityDynamics\Settings(array(
+            'key' => 'maconf_settings',
+            'store' => 'options',
+            'data' => array(
+                'name' => $this->name,
+                'version' => $this->args['version'],
+                'domain' => $this->domain,
+                'prefix' => 'mc_',
+                'conference_type' => 'maestro_conference',
+            )
+                ));
 
         /* Probably add default settings */
-        $default = $this->get_schema( 'extra.schemas.settings' );
-        if( is_array( $default ) ) {
-          $this->set( \UsabilityDynamics\Utility::extend( $default, $this->get() ) );
+        $default = $this->get_schema('extra.schemas.settings');
+        if (is_array($default)) {
+          $this->set(\UsabilityDynamics\Utility::extend($default, $this->get()));
         }
-
       }
 
       /**
@@ -141,9 +147,9 @@ namespace UsabilityDynamics\MaestroConference {
        *
        * @author peshkov@UD
        */
-      public function __call( $name, $arguments ) {
-        if( is_callable( array( "\UsabilityDynamics\MaestroConference\Utility", $name ) ) ) {
-          return call_user_func_array( array( "\UsabilityDynamics\MaestroConference\Utility", $name ), $arguments );
+      public function __call($name, $arguments) {
+        if (is_callable(array("\UsabilityDynamics\MaestroConference\Utility", $name))) {
+          return call_user_func_array(array("\UsabilityDynamics\MaestroConference\Utility", $name), $arguments);
         } else {
           return NULL;
         }
@@ -152,5 +158,4 @@ namespace UsabilityDynamics\MaestroConference {
     }
 
   }
-
 }

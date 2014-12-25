@@ -1,7 +1,7 @@
 {
-  "name": "usabilitydynamics/lib-wp-mail",
+  "name": "usabilitydynamics/lib-mail",
   "type": "library",
-  "description": "WP Mail Handler for WP-CRM Notifications",
+  "description": "Contains Mail managers, e.g. WP Mail Handler for WP-CRM Notifications",
   "author": {
     "name": "Usability Dynamics",
     "url": "http://UsabilityDynamics.com"
@@ -24,6 +24,6 @@
   },
   "minimum-stability": "dev",
   "autoload": {
-    "classmap": "lib/classes"
+    "classmap": [ "lib/classes" ]
   }
 }

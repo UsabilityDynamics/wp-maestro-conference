@@ -5,14 +5,16 @@
 ?>
 <style>
     .uisf-field {
-	float: left;
-	width: 100%;
+      float: left;
+      width: 100%;
     }
 </style>
 <div class="accordion-section-content">
     <div class="inside">
         <div class="uisf-field uisf-checkbox-wrapper"><div class="uisf-label">
-                <label for="registration_is_enabled">Registration is enabled</label>
+                <label for="registration_is_enabled">
+                    <?php _e('Registration is enabled', ud_get_wp_maestro_conference('domain')); ?>
+                </label>
             </div>
             <div class="uisf-input">
                 <input type='hidden' name='registration|is_enabled' value='0' />
@@ -20,7 +22,9 @@
             </div>
         </div>          
         <div class="uisf-field uisf-checkbox-wrapper"><div class="uisf-label">
-                <label for="registration_is_enabled_non_register">Registration is disabled for non-registered users</label>
+                <label for="registration_is_enabled_non_register">
+                    <?php _e('Registration is disabled for non-registered users', ud_get_wp_maestro_conference('domain')); ?>
+                </label>
             </div>
             <div class="uisf-input">
                 <input type='hidden' name='registration|is_enabled_non_register' value='0' />

@@ -25,7 +25,7 @@
     "usabilitydynamics/lib-wp-shortcode": "0.1.0",
     "usabilitydynamics/lib-ui": "0.2.1",
     "usabilitydynamics/lib-maestro-conference-php-client": "*",
-    "usabilitydynamics/lib-wp-mail": "*"
+    "usabilitydynamics/lib-mail": "*"
   },
   "require-dev": {
     "usabilitydynamics/lib-wp-phpunit": "~0.2",
@@ -105,8 +105,7 @@
               "admin_information": {
                   "fields": [
                       "mc_status",
-                      "mc_scheduledStartDate",
-                      "mc_isPaid"
+                      "mc_scheduledStartDate"
                   ]
               }
             }
@@ -120,15 +119,6 @@
             "options": {
               "active": "Active",
               "closed": "Closed"
-            }
-          },
-          "mc_isPaid": {
-            "name": "Paid",
-            "desc": "Is paid conference",
-            "type": "select",
-            "options": {
-              "paid": "Paid",
-              "free": "Free"
             }
           },
           "mc_scheduledStartDate": {
@@ -171,11 +161,6 @@
             "name": "l10n.mc_api",
             "desc": "l10n.mc_api_credentials"
           },
-          "meta": {
-            "id": "meta",
-            "name": "l10n.mc_meta_fields",
-            "desc": "l10n.mc_meta_fields_availability"
-          },
           "conference": {
             "id": "conference",
             "name": "l10n.mc_conference",
@@ -197,11 +182,6 @@
             "id": "pre_registration",
             "name": "l10n.mc_pre_registration",
             "menu": "conference"
-          },
-          "meta_fields": {
-            "id": "meta_fields",
-            "name": "l10n.mc_meta_fields_availability",
-            "menu": "meta"
           }
         },
         "fields": [

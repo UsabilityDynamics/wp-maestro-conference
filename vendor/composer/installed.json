@@ -324,17 +324,17 @@
         ]
     },
     {
-        "name": "usabilitydynamics/lib-wp-mail",
+        "name": "usabilitydynamics/lib-mail",
         "version": "master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "git@github.com:UsabilityDynamics/lib-wp-mail",
+            "url": "git@github.com:UsabilityDynamics/lib-mail",
             "reference": "master"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/UsabilityDynamics/lib-wp-mail/archive/master.zip",
+            "url": "https://github.com/UsabilityDynamics/lib-mail/archive/master.zip",
             "reference": null,
             "shasum": null
         },
@@ -344,16 +344,18 @@
         },
         "type": "library",
         "extra": {
-            "installer-name": "lib-wp-mail"
+            "installer-name": "lib-mail"
         },
         "installation-source": "source",
         "autoload": {
-            "classmap": "lib/classes"
+            "classmap": [
+                "lib/classes"
+            ]
         },
         "license": [
             "GPL-2.0"
         ],
-        "description": "WP Mail Handler for WP-CRM Notifications"
+        "description": "Contains Mail managers, e.g. WP Mail Handler for WP-CRM Notifications"
     },
     {
         "name": "usabilitydynamics/lib-wp-bootstrap",
