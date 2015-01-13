@@ -72,7 +72,6 @@ namespace UsabilityDynamics\MaestroConference {
        *
        * @todo Vladimir, fix is_active status. It breaks the logic. http://screencast.com/t/zlL33QiNYJix
        * @todo Vladimir, add admin notices for manual syncronization
-       * @todo
        * @return string
        */
       public function synchronize_conference() {
@@ -139,7 +138,7 @@ namespace UsabilityDynamics\MaestroConference {
             delete_post_meta( $conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants' );
 
             //adding updated callers to our DB
-            add_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($persons), true);
+            add_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', $persons, true);
 
           } catch (\Exception $e) {
             update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0');
@@ -257,7 +256,7 @@ namespace UsabilityDynamics\MaestroConference {
         //if user not exist or user already has access or can't take part on this conference
         if ($user) {
           $user = apply_filters('before_add_person_conference', $user);
-          $result = $this->instance->client->addPerson($this->instance->get('api.conference_uid'), $role, $user->user_nicename);
+          $result = $this->instance->client->addPerson($this->instance->get('api.conference_uid'), $role, $user->display_name);
           $response = $result['response'];
           if ($response['code'] != 0) {
             apply_filters('error_cron_add_person_conference', $user_id);
@@ -270,14 +269,14 @@ namespace UsabilityDynamics\MaestroConference {
         }
         $response = array(
             'code' => '-1',
-            'message' => 'User is not exist',
+            'message' => __('User is not exist', ud_get_wp_maestro_conference('domain')),
             'value' => array()
         );
         return $response;
       }
 
       /**
-       * Add fake user to conference
+       *  Add fake user to conference
        *
        * @param int $wp_conference_id Wordpress conference ID.
        *
@@ -310,8 +309,7 @@ namespace UsabilityDynamics\MaestroConference {
        * @return void
        */
       function add_meta_boxes() {
-        /* @todo: all strings must be covered to localization. e.g. __() */
-        add_meta_box( 'mc_callers', 'Participants', array($this, 'show_metabox'), 'maestro_conference', 'normal', 'high' );
+        add_meta_box( 'mc_callers', __('Participants', ud_get_wp_maestro_conference('domain')), array($this, 'show_metabox'), 'maestro_conference', 'normal', 'high' );
       }
 
       /**
@@ -320,8 +318,10 @@ namespace UsabilityDynamics\MaestroConference {
        * @return void
        */
       function show_metabox() {
-        wp_enqueue_script('mc-admin', ud_get_wp_maestro_conference()->path('static/scripts/mc-admin.js'), array('jquery'));
         global $post;
+        /*enqueue js script*/
+        wp_enqueue_script('mc-admin', ud_get_wp_maestro_conference()->path('static/scripts/mc-admin.js'), array('jquery'));
+        
         $participants = array();
         $post_meta = get_post_meta($post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', true);
         if ($post_meta) {
@@ -349,9 +349,9 @@ namespace UsabilityDynamics\MaestroConference {
               $local_participants = array();
               for ($i = 0; $i < 24; $i++) {
                 $local_participants[$i]['wp_user_id'] = '';
-                $local_participants[$i]['name'] = 'Empty';
+                $local_participants[$i]['name'] = __('Empty', ud_get_wp_maestro_conference('domain'));
               }
-              add_post_meta($post_ID, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($local_participants), true);
+              add_post_meta($post_ID, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants, true);
               add_post_meta($post_ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0', true);
               return $post_ID;
             }

@@ -15,14 +15,17 @@
       <?php endforeach; endif; ?>
   </select>
 <?php endif; ?>
-<div class="mc_conferences">
+<div class="mc_conferences" id="mc_conferences">
   <?php if ($posts && $posts->have_posts()) :
   while ($posts->have_posts()) : $posts->the_post(); global $post; ?>
     <div class="row mc-conferences-shortcode" style="width:800px;">
       <?php $this->render( "mc-conferences-item", array('post' => $post) ); ?>
     </div>       
   <?php 
-  endwhile; 
+  endwhile; ?> 
+  <?php echo $pagination ;?>
+
+  <?php wp_reset_query();
   else: ?>
     <?php _e('Nothing found', ud_get_wp_maestro_conference('domain')); ?>
   <?php endif; ?>

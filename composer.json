@@ -160,11 +160,6 @@
             "id": "api",
             "name": "l10n.mc_api",
             "desc": "l10n.mc_api_credentials"
-          },
-          "conference": {
-            "id": "conference",
-            "name": "l10n.mc_conference",
-            "desc": "l10n.mc_general_pt_setting"
           }
         },
         "sections": {
@@ -172,16 +167,6 @@
             "id": "credentials",
             "name": "l10n.mc_credentials",
             "menu": "api"
-          },
-          "registration": {
-            "id": "registration",
-            "name": "l10n.mc_registration",
-            "menu": "conference"
-          },
-          "pre_registration": {
-            "id": "pre_registration",
-            "name": "l10n.mc_pre_registration",
-            "menu": "conference"
           }
         },
         "fields": [

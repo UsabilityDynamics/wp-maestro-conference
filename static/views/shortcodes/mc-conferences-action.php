@@ -12,7 +12,7 @@ if( $conference->status == 'active' ) {
     echo '<button class="btn button mc-button disabled">' . __( 'Registered', ud_get_wp_maestro_conference( 'domain' )  ) . '</button>';
   }
   /* No available callers in conference. */
-  elseif( !ud_get_wp_maestro_conference()->has_available_callers( $conference->ID ) && !$user_conference_data->is_registered ) {
+  elseif( !ud_get_wp_maestro_conference()->has_available_callers( $conference->ID ) ) {
     echo '<button class="btn button mc-button disabled">' . __( 'Registration Full', ud_get_fsw_membership('domain') ) . '</button>';
   }
   /* Show Action button to Register or Cancel conference  */

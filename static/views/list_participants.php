@@ -9,9 +9,10 @@
 		<td><?php _e('PIN', ud_get_wp_maestro_conference('domain')); ?>:</td>
 		<td><?php _e('Phone', ud_get_wp_maestro_conference('domain')); ?>:</td>
 	</tr>
-	<?php foreach ($participants as $value): ?>
+	<?php $i=1; foreach ($participants as $k=>$value): ?>
   	<tr>
   		<td>
+        <?php echo $i; $i++; ?>
 			  <?php if (!empty($value['wp_user_id']) && !empty($value['name'])): $user_data = get_userdata( $value['wp_user_id']); ?>
 				<a target="_blank" href="<?php get_edit_user_link($value['wp_user_id']) ?>"><?php echo $value['name']; ?></a> <?php echo '(' . $user_data->data->user_email . ')'; ?>
 			  <?php else: ?>

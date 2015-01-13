@@ -168,14 +168,14 @@ if (!class_exists('UsabilityDynamics\MaestroConference\UI')) {
             // Add custom content here
             break;
           case 'ud:ui:settings:view:section:registration:top':
-            $this->get_template_part('section_registration');
+            //$this->get_template_part('section_registration');
             // Add custom content here
             break;
           case 'ud:ui:settings:view:section:registration:bottom':
             // Add custom content here
             break;
           case 'ud:ui:settings:view:section:pre_registration:top':
-            $this->get_template_part('section_pre_registration');
+            //$this->get_template_part('section_pre_registration');
             // Add custom content here
             break;
           case 'ud:ui:settings:view:section:pre_registration:bottom':

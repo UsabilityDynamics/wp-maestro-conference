@@ -50,6 +50,7 @@ namespace UsabilityDynamics\MaestroConference {
         $query = array(
             'posts_per_page' => ( isset($args['posts_per_page']) ? $args['posts_per_page'] : 25 ),
             'offset' => ( isset($args['offset']) ? $args['offset'] : 0 ),
+            'paged' => ( isset($args['paged']) ? $args['paged'] : 0 ),
             'meta_query' => array(),
         );
 
@@ -75,6 +76,29 @@ namespace UsabilityDynamics\MaestroConference {
         $conference =  new \WP_Query($query);
         return $conference;
       }
+      
+      /**
+       * Returns Conference by conference ID
+       *
+       * Available $args params:
+       * conference_id
+       */
+      static public function get_conference_by_id($args = array()) {
+        if (empty($args['conference_id'])) {
+          return false;
+        }
+        /* Default query settings */
+        $query = array(
+            'posts_per_page' => 1,
+            'offset' => 0,
+            'p' => $args['conference_id'],
+            'meta_query' => array(),
+            'post_type' => ud_get_wp_maestro_conference('conference_type')
+        );
+
+        $conference =  new \WP_Query($query);
+        return $conference;
+      }
 
       /**
        * Returns Conference data object
@@ -94,6 +118,7 @@ namespace UsabilityDynamics\MaestroConference {
           $local_participants = unserialize($result);
           foreach ($local_participants as $local_participant) {
             if (!empty($local_participant['wp_user_id'])) {
+              $participants[] = get_user_by("id", $local_participant['wp_user_id']);
               $count_participants++;
             }
           }
@@ -103,6 +128,7 @@ namespace UsabilityDynamics\MaestroConference {
         $post['scheduledStartDate'] = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'scheduledStartDate', true);
         $post['is_active'] = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'is_active', true);
         $post['status'] = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'status', true);
+        $post['participants'] = $participants;
         /* Return */
         if ($output == OBJECT) {
           return (object) $post;
@@ -115,7 +141,10 @@ namespace UsabilityDynamics\MaestroConference {
        *
        * @param type $post_id
        */
-      static public function get_user_conference_data($post_id) {
+      static public function get_user_conference_data($post_id = false) {
+        if (!$post_id) {
+          return false;
+        }
         $post = get_post($post_id, ARRAY_A);
         if ($post['post_type'] !== ud_get_wp_maestro_conference('conference_type')) {
           return false;
@@ -126,6 +155,7 @@ namespace UsabilityDynamics\MaestroConference {
         $result['phone'] = get_user_meta(get_current_user_id(), ud_get_wp_maestro_conference('prefix') . 'conference_phone_'.$post_id, true);
         return (object) $result;
       }
+      
 
       /**
        * Returns PIN for passed user ( or for logged in user if param is not passed )
@@ -259,7 +289,7 @@ namespace UsabilityDynamics\MaestroConference {
               add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
               add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
               $local_participants[$key]['wp_user_id'] = $user_id;
-              update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($local_participants));
+              update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants);
 
               break;
             }
@@ -361,8 +391,7 @@ namespace UsabilityDynamics\MaestroConference {
             if ($local_participant['wp_user_id'] == $user_id) {
               $local_participants[$key]['wp_user_id'] = '';
               $local_participants[$key]['name'] = 'Empty';
-              /* @todo: why it's being used serialize for post meta everywhere? WordPress does it itself! */
-              update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($local_participants));
+              update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants);
               delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
               delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
 
