@@ -20,12 +20,8 @@ $user_conference_data = ud_get_wp_maestro_conference()->get_user_conference_data
         <?php echo (!empty($user_conference_data->PIN)) ? 'PIN: ' . $user_conference_data->PIN : ''; ?>
         <?php echo (!empty($user_conference_data->phone)) ? 'Phone: ' . $user_conference_data->phone : ''; ?>
     </p>
-    <p><?php the_content(); ?></p>
+    <p><?php the_excerpt(); ?></p>
 </div>
 <div class="col-md-4">
-    <?php
-      if (!$conference->is_active && $conference->status == 'active') {
-        do_shortcode("[mc_button conference_id='" . $post->ID . "' action='" . ((!$user_conference_data->is_registered) ? 'add' : 'remove') . "' label='" . ((!$user_conference_data->is_registered) ? 'Pre-Register' : 'Cancel') . "' send_mail='true' desc='Pre-Registration in Conference' extra='id=12&test=asdf' callback='my_function_to_call']");
-      }
-    ?>
+  <?php $this->render( "mc-conferences-action", array( 'conference' => $conference, 'user_conference_data' => $user_conference_data ) ); ?>
 </div>

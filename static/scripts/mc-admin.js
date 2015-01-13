@@ -1,3 +1,3 @@
-jQuery('document').ready(function () {
-    jQuery('#mc_callers').addClass('closed');
+jQuery("document").ready(function() {
+    jQuery("#mc_callers").addClass("closed");
 });

@@ -69,12 +69,16 @@ namespace UsabilityDynamics\MaestroConference {
 
       /**
        * Conference synchronization between MC and website conferences
+       *
+       * @todo Vladimir, fix is_active status. It breaks the logic. http://screencast.com/t/zlL33QiNYJix
+       * @todo Vladimir, add admin notices for manual syncronization
+       * @todo
        * @return string
        */
       public function synchronize_conference() {
         $conference = self::get_nearest_conference();
         
-        if ($conference->post) {
+        if ( $conference->post && is_object( $this->instance->client ) ) {
           $current_active_conference = self::get_current_active_conference();
           if ($current_active_conference->post) {
             update_post_meta($current_active_conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0');
@@ -83,12 +87,15 @@ namespace UsabilityDynamics\MaestroConference {
           update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '1');
 
           try {
+
+            /* Get details about conference from Maestro Conference service */
             $mc_conference = $this->instance->client->getConferenceData($this->instance->get('api.conference_uid'));
             if ($mc_conference['code'] != 0) {
               throw new \Exception(__($mc_conference['message'], ud_get_wp_maestro_conference('domain')));
             }
+
+            /* Removing old callers from conference */
             if (isset($mc_conference['response']['value']['person'])) {
-              //removing old callers from conference
               foreach ($mc_conference['response']['value']['person'] as $person) {
                 if ($person['role'] == 'PARTICIPANT') {
                   $response = $this->instance->client->removePerson($this->instance->get('api.conference_uid'), $person['UID']);
@@ -99,8 +106,8 @@ namespace UsabilityDynamics\MaestroConference {
               }
             }
 
-            $local_participants = self::_get_local_participants($conference->post->ID);
-            //addin new callers from our DB
+            /* Adding new callers from our DB */
+            $local_participants = Utility::get_local_participants($conference->post->ID);
             $count_local_participants = 0;
             if (!empty($local_participants)) {
               foreach ($local_participants as $local_participant) {
@@ -116,7 +123,7 @@ namespace UsabilityDynamics\MaestroConference {
               }
             }
 
-            //if our callers < 24 - adding fake users
+            /* if our callers < 24 - adding fake users */
             if ($count_local_participants < 24) {
               for ($i = 0; $i < (24 - $count_local_participants); $i++) {
                 $response = self::_cron_add_fake_user_to_conference($conference->post->ID);
@@ -128,10 +135,12 @@ namespace UsabilityDynamics\MaestroConference {
               }
             }
 
-            //remove callers in our conference
-            delete_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants');
+            /* remove callers in our conference */
+            delete_post_meta( $conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants' );
+
             //adding updated callers to our DB
             add_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($persons), true);
+
           } catch (\Exception $e) {
             update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0');
             /* Add error notice */
@@ -268,106 +277,12 @@ namespace UsabilityDynamics\MaestroConference {
       }
 
       /**
-       *  Add person to conference
-       *
-       * @param int $wp_conference_id Wordpress conference ID.
-       * @param int $user_id User ID.
-       * @param string $role User role.
-       *
-       *  @author PLAN
-       */
-      public function add_person_to_conference($wp_conference_id, $user_id = '', $role = 'PARTICIPANT') {
-        $conference_status = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'status', true);
-        $conference_is_active = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'is_active', true);
-        try {
-          if ($conference_status == 'active') {
-            $user = get_userdata( $user_id);
-
-            $user_meta = get_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, true);
-            if ($user_meta) {
-              throw new \Exception(__('You have already registered in the conference', ud_get_wp_maestro_conference('domain')));
-            }
-            $user_can_take_part = true;
-            $user_can_take_part = apply_filters('mc_user_can_take_part', $user_id);
-            //if user not exist or user already has access or can't take part on this conference
-            if ($user && $user_can_take_part) {
-              $user = apply_filters('before_add_person_conference', $user);
-
-              $local_participants = self::_get_local_participants($wp_conference_id);
-              if (!empty($local_participants)) {
-                foreach ($local_participants as $key => $local_participant) {
-                  if (empty($local_participant['wp_user_id'])) {
-                    if ($conference_is_active == '1') {
-                      $result = $this->instance->client->updatePerson($local_participants[$key]['UID'], 'name', $user->data->display_name);
-                      $response = $result['response'];
-                      if ($response['code'] != 0) {
-                        apply_filters('error_add_person_conference', $user);
-                        throw new \Exception(__('Something wrong happened on trying to add person to conference.', ud_get_wp_maestro_conference('domain')));
-                      }
-                      $local_participants[$key] = $response['value'];
-                      add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_PIN_' . $wp_conference_id, $response['value']['PIN'], true);
-                      add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_phone_' . $wp_conference_id, $response['value']['callInNumber'], true);
-
-                      Mail::add_to_conference( $user_id, array(
-                        'subject' => '',
-                        'message' => '',
-                        'data' => array(
-                          'conference_id' => $wp_conference_id,
-                          'description' => '',
-                        )
-                      ) );
-                    } else {                      
-                      $local_participants[$key]['name'] = $user->user_nicename;
-                    }
-                    add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
-                    add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
-                    $local_participants[$key]['wp_user_id'] = $user_id;
-                    update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($local_participants));
-                    //add notification to user
-                    do_action('after_add_person_conference', $user);
-                    return $local_participants[$key];
-                  }
-                }
-                return false;
-              } else {
-                throw new \Exception(__('Something wrong happened on trying to add person to conference.', ud_get_wp_maestro_conference('domain')));
-              }
-            } else {
-              throw new \Exception(__('You can not take part on this conference', ud_get_wp_maestro_conference('domain')));
-            }
-          } else {
-            throw new \Exception(__('Conference not active.', ud_get_wp_maestro_conference('domain')));
-          }
-        } catch (\Exception $e) {
-          /* Add error notice */
-          self::_add_conference_error_notice($user_id, $e->getMessage());
-
-          return false;
-        }
-        return false;
-      }
-
-      /**
-       *  Get local participants from conference
+       * Add fake user to conference
        *
        * @param int $wp_conference_id Wordpress conference ID.
        *
-       *  @author PLAN
-       */
-      static private function _get_local_participants($wp_conference_id) {
-        $result = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', true);
-        $local_participants = array();
-        if ($result)
-          $local_participants = unserialize($result);
-        return $local_participants;
-      }
-
-      /**
-       *  Add fake user to conference
-       *
-       * @param int $wp_conference_id Wordpress conference ID.
-       *
-       *  @author PLAN
+       * @author PLAN
+       * @return array $response
        */
       private function _cron_add_fake_user_to_conference($wp_conference_id) {
         $conference_is_active = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'is_active', true);
@@ -390,70 +305,13 @@ namespace UsabilityDynamics\MaestroConference {
       }
 
       /**
-       *  Remove person from conference
-       *
-       * @param int $wp_conference_id The ID of the conference.
-       * @param array $user_id User ID.
-       *
-       *  @author PLAN
-       */
-      static public function remove_person_from_conference($wp_conference_id = null, $user_id = null) {
-        $conference_is_active = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'is_active', true);
-        try {
-          if (!$conference_is_active) {
-            $user = get_user_by("id", $user_id);
-            $user_meta = get_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id);
-            if (!$user_meta) {
-              throw new \Exception(__('You are not registered in the conference', ud_get_wp_maestro_conference('domain')));
-            }
-            //if user exist and user already has access
-            if ($user) {
-              $user = apply_filters('before_remove_person_conference', $user);
-
-              $local_participants = self::_get_local_participants($wp_conference_id);
-              if (!empty($local_participants)) {
-                foreach ($local_participants as $key => $local_participant) {
-                  if ($local_participant['wp_user_id'] == $user_id) {
-                    $local_participants[$key]['wp_user_id'] = '';
-                    $local_participants[$key]['name'] = 'Empty';
-                    update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', serialize($local_participants));
-                    delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
-                    delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
-                    apply_filters('after_remove_person_conference', $user);
-                    return true;
-                  }
-                }
-              } else {
-                throw new \Exception(__('Something wrong happened on trying to remove person on conference.', ud_get_wp_maestro_conference('domain')));
-              }
-            } else {
-              throw new \Exception(__('You are not registered in the conference', ud_get_wp_maestro_conference('domain')));
-            }
-          } else {
-            throw new \Exception(__('You can not give up the conference', ud_get_wp_maestro_conference('domain')));
-          }
-        } catch (\Exception $e) {
-          /* Add error notice */
-          self::_add_conference_error_notice($user_id, $e->getMessage());
-
-          return false;
-        }
-        return false;
-      }
-
-      /*       * ************************************************
-       * SHOW META BOX
-       * ************************************************ */
-
-      /**
        * Add meta box for multiple post types
        *
        * @return void
        */
       function add_meta_boxes() {
-        add_meta_box(
-                'mc_callers', 'Participants', array($this, 'show_metabox'), 'maestro_conference', 'normal', 'high'
-        );
+        /* @todo: all strings must be covered to localization. e.g. __() */
+        add_meta_box( 'mc_callers', 'Participants', array($this, 'show_metabox'), 'maestro_conference', 'normal', 'high' );
       }
 
       /**
@@ -525,42 +383,6 @@ namespace UsabilityDynamics\MaestroConference {
         }
         wp_redirect(apply_filters('redirect_post_location', $location, $post_ID));
         exit;
-      }
-
-      /**
-       * Adds error notice on adding to conference failure for specific user.
-       * Note, notices are being stored one minute.
-       *
-       * to show and flush notices for specific user just call:
-       * ud_get_wp_maestro_conference()->get_conference_error_notices( 777 );
-       *
-       * Must not be called directly.
-       */
-      static private function _add_conference_error_notice($user_id, $message) {
-        $transient = ud_get_wp_maestro_conference('prefix') . 'mc_err_notices_' . $user_id;
-        if (empty($user_id) || empty($message)) {
-          return false;
-        }
-        $value = get_transient($transient);
-        if (!empty($value) && is_array($value)) {
-          $value[$type] = $message;
-        } else {
-          $value = array($type => $message);
-        }
-        set_transient($transient, $value, MINUTE_IN_SECONDS);
-      }
-
-      /**
-       * Returns error notices which are being added person on conference
-       */
-      static public function get_conference_error_notices($user_id = false, $flush = true) {
-        $user_id ? !$user_id : get_current_user_id();
-        $transient = ud_get_wp_maestro_conference('prefix') . 'mc_err_notices_' . $user_id;
-        $value = get_transient($transient);
-        if ($flush) {
-          delete_transient($transient);
-        }
-        return $value;
       }
 
     }

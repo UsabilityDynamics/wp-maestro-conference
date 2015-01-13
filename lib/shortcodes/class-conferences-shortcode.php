@@ -84,7 +84,7 @@ namespace UsabilityDynamics\MaestroConference {
             'active' => __('Active', ud_get_wp_maestro_conference('domain')),
             'closed' => __('Closed', ud_get_wp_maestro_conference('domain')),
         ));
-        $this->render($data, $data['template']);
+        $this->render( $data['template'], $data );
       }
 
       public function conferences_filter() {
@@ -110,7 +110,7 @@ namespace UsabilityDynamics\MaestroConference {
                         ), $request)
         );
         $data['is_ajax'] = true;
-        $this->render($data, $data['template']);
+        $this->render( $data['template'], $data );
         exit();
       }
 

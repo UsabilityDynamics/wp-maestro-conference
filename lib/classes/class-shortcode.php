@@ -15,7 +15,7 @@ namespace UsabilityDynamics\MaestroConference {
        * 
        * 
        */
-      public function render( $vars, $template, $output = true ) {
+      public function render( $template, $vars, $output = true ) {
         $name = apply_filters( $this->id . '_template_name', array( $template ), $this );
         /* Set possible pathes where templates could be stored. */
         $path = apply_filters( $this->id . '_template_path', array(

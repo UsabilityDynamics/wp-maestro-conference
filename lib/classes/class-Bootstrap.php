@@ -48,7 +48,8 @@ namespace UsabilityDynamics\MaestroConference {
          */
         $customer = $this->get('api.customer');
         $auth_key = $this->get('api.auth_key');
-        if (!empty($customer) && !empty($auth_key)) {
+        $conference_uid = $this->get('api.conference_uid');
+        if (!empty($customer) && !empty($auth_key) && !empty( $conference_uid ) ) {
           $this->client = new Client($customer, $auth_key);
         }
         $this->core = new Core();

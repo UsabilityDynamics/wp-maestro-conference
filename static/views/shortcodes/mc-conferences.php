@@ -19,7 +19,7 @@
   <?php if ($posts && $posts->have_posts()) :
   while ($posts->have_posts()) : $posts->the_post(); global $post; ?>
     <div class="row mc-conferences-shortcode" style="width:800px;">
-      <?php $this->render(array('post' => $post), "{$template}-item"); ?>
+      <?php $this->render( "mc-conferences-item", array('post' => $post) ); ?>
     </div>       
   <?php 
   endwhile; 

@@ -54,7 +54,7 @@ namespace UsabilityDynamics\MaestroConference {
 
 		$data['pin'] = Utility::get_pin($data['user_id'], $data['conference_id']);
 
-		$this->render($data, $data['template']);
+		$this->render( $data['template'], $data );
 	  }
 
 	}

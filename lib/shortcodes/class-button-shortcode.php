@@ -33,7 +33,7 @@ namespace UsabilityDynamics\MaestroConference {
             ),
             'label' => array(
               'name' => __( 'Label', ud_get_wp_maestro_conference('domain') ),
-              'description' => __( 'Optional. Label for Button. By default \'Add Credits\' and \'Purchase\' ', ud_get_wp_maestro_conference('domain') ),
+              'description' => __( 'Optional. Label for Button.', ud_get_wp_maestro_conference('domain') ),
             ),
             'send_mail' => array(
               'name' => __( 'Send Mail', ud_get_wp_maestro_conference('domain') ),
@@ -52,6 +52,10 @@ namespace UsabilityDynamics\MaestroConference {
               'name' => __( 'Callback Function', ud_get_wp_maestro_conference('domain') ),
               'description' => __( 'Optional. Callback function which will be called on success action.', ud_get_wp_maestro_conference('domain') ),
             ),
+            'redirect_to' => array(
+              'name' => __( 'Redirect To URL', ud_get_wp_maestro_conference( 'domain' ) ),
+              'description' => __( 'Optional. Redirects to specific url on success.', ud_get_wpi_wallet( 'domain' ) ),
+            ),
             'template' => array(
               'name' => __( 'Template', ud_get_wp_maestro_conference('domain') ),
               'description' => __( 'Optional. If not set, default template\'s name is used.', ud_get_wp_maestro_conference('domain') ),
@@ -64,7 +68,7 @@ namespace UsabilityDynamics\MaestroConference {
         parent::__construct( $options );
         
         /* Hooks */
-        add_action( 'wp_ajax_mc_button_action', array( $this, 'register_process_action' ) );
+        add_action( 'wp_ajax_mc_button_action', array( $this, 'process_action' ) );
         
       }
       
@@ -80,8 +84,8 @@ namespace UsabilityDynamics\MaestroConference {
           'hide_on_success' => 'false', // Optional
           'success_label' => __( 'Done', ud_get_wp_maestro_conference('domain') ), // Optional
           'send_mail' => 'true', // Optional
-          'desc' => '', // Optional
           'extra' => '', // Optional
+          'redirect_to' => '', // Optional
           'callback' => '', // Optional
           'template' => str_replace( '_', '-', $this->id ), // Optional
         ), $atts );
@@ -96,6 +100,7 @@ namespace UsabilityDynamics\MaestroConference {
         if( !in_array( $data[ 'action' ], array( 'add', 'remove' ) ) ) {
           return false;
         }
+
         /* Check conference ID. */
         if( empty( $data[ 'conference_id' ] ) || !is_numeric( $data[ 'conference_id' ] ) || $data[ 'conference_id' ] <= 0 ) {
           return false;
@@ -117,59 +122,85 @@ namespace UsabilityDynamics\MaestroConference {
           'admin_ajax' => admin_url( 'admin-ajax.php' ),
         ) );
         
-        $this->render( $data, $data[ 'template' ] );
+        $this->render( $data[ 'template' ], $data );
       }
-      
+
       /**
        * Process Action
        * AJAX
-       * 
+       *
        * Available hooks:
-       * 
+       *
        * Manage arguments before proceed:
-       * mc_button_process_action
-       * 
+       * mc_button_process_action_params
+       *
        * Do some custom stuff on success:
        * mc_button_on_success
-       * 
+       *
        */
-      public function register_process_action() {
-        $request = $_REQUEST;        
+      public function process_action() {
+        global $wpdb;
+
+        $request = $_REQUEST;
+
+        /* Disable autocommit to Database to prevent broken balance transactions. */
+        $wpdb->query( 'SET autocommit = 0;' );
+        $wpdb->query( 'START TRANSACTION;' );
 
         try {
           /* User must be logged in */
           if( !is_user_logged_in() ) {
-            throw new \Exception( __( 'Cheating?', ud_get_wp_maestro_conference('domain') ) );
+            throw new \Exception( __( 'Cheating?', ud_get_wp_maestro_conference( 'domain' ) ) );
           }
           /* Check wpnonce */
-          if( empty( $request[ 'wpnonce' ] ) || !$this->mc_is_valid_wpnonce( $request[ 'wpnonce' ] ) ) {
+          if( empty( $request[ 'wpnonce' ] ) || !$this->is_valid_wpnonce( $request[ 'wpnonce' ] ) ) {
             throw new \Exception( __( 'Cheating?', ud_get_wp_maestro_conference('domain') ) );
           }
+
           /* Check if type ( action ) is valid */
           if( !in_array( $request[ 'type' ], array( 'add', 'remove' ) ) ) {
             throw new \Exception( __( 'Invalid Action. Ask site administrator for help.', ud_get_wp_maestro_conference('domain') ) );
           }
+
+
           /* Prepare extra data if it exists */
           $request[ 'extra' ] = wp_parse_args( str_replace( '&amp;', '&', urldecode( $request[ 'extra' ] ) ) );
 
-          $request = apply_filters( 'mc_button_process_action', $request );
-          
-          /* Prepare arguments for add/remove credis from balance */
+          $request = apply_filters( 'mc_button_process_action_params', $request );
+
+          /* Maybe do some custom stuff here */
+          $custom_stuff = apply_filters( 'mc_button_before_process', true, $request );
+
+          if( is_wp_error( $custom_stuff ) ) {
+            throw new \Exception( $custom_stuff->get_error_message );
+          } else if ( !$custom_stuff ) {
+            throw new \Exception( __( 'There is a some error. Please, notify site administrator about this issue, if it will happen again.', ud_get_wpi_wallet( 'domain' ) )  );
+          }
+
+          /* Prepare arguments for add or cancel registration */
           $params = array_filter( array(
-            'extra' => ( !empty( $request[ 'extra' ] ) ? $request[ 'extra' ] : false ),
-            'desc' => ( !empty( $request[ 'desc' ] ) ? html_entity_decode( $request[ 'desc' ] ) : '' ),
-            'send_mail' => ( !empty( $request[ 'send_mail' ] ) ? $request[ 'send_mail' ] : 'false' )
+            'send_mail' => ( !empty( $request[ 'send_mail' ] ) ? $request[ 'send_mail' ] : 'false' ),
+            'wp_conference_id' => $request[ 'conference_id' ],
+            'force_autocommit' => true,
           ) );
-          
-          /* Here we go now! */
+
+          /*
+           * Here we go now!
+           *
+           * Note!
+           * We must be careful here since we deal with remote service.
+           * So if something will go wrong we may not be able to revert changes on Maestro Conference.
+           * It means, we must not throw new Exception manually ( some custom stuff )
+           * after add_person_to_conference / remove_person_from_conference
+           */
           if( $request[ 'type' ] == 'add' ) {
-            $r = ud_get_wp_maestro_conference()->core->add_person_to_conference( $request[ 'conference_id' ], get_current_user_id() );
+            $r = ud_get_wp_maestro_conference()->add_person_to_conference( $params );
           }
           else if ( $request[ 'type' ] == 'remove' ) {
-            $r = ud_get_wp_maestro_conference()->core->remove_person_from_conference( $request[ 'conference_id' ], get_current_user_id() );
+            $r = ud_get_wp_maestro_conference()->remove_person_from_conference( $params );
           }
-          
-          /* WHAT? Looks like there is an error on trying to operate with balance. Get error. */
+
+          /* WHAT? Looks like there is an error on trying to operate with registration. Get error. */
           if( !$r || is_wp_error( $r ) ) {
             $errors = ud_get_wp_maestro_conference()->get_conference_error_notices();
             if( !empty( $errors ) && is_array( $errors ) ) {
@@ -179,38 +210,38 @@ namespace UsabilityDynamics\MaestroConference {
                 throw new \Exception( $errors[ $key ] );
               }
             }
-            throw new \Exception( __( 'There is an error on trying to operate with this conference. Please try later.', ud_get_wp_maestro_conference('domain') )  );
+            throw new \Exception( __( 'There is an error on trying to add/cancel conference. Please try later.', ud_get_wpi_wallet( 'domain' ) )  );
           }
-          
-          /* Maybe do some custom stuff here */
-          $custom_stuff = apply_filters( 'mc_button_on_success', true, $request );
-          if( is_wp_error( $custom_stuff ) ) {
-            throw new \Exception( $custom_stuff->get_error_message );
-          } else if ( !$custom_stuff ) {
-            throw new \Exception( __( 'There is a some error. Please, notify site administrator about this issue, if it will happen again.', ud_get_wp_maestro_conference('domain') )  );
-          }
-          
-          /* Run callback if it set */
-          if( !empty( $request[ 'callback' ] ) && is_callable( $request[ 'callback' ] ) ) {
-            if( !call_user_func( $request[ 'callback' ], $request ) ) {
-              throw new \Exception( __( 'There is a some error on callback function. Please, notify site administrator about this issue, if it will happen again.', ud_get_wp_maestro_conference('domain') )  );
-            }
-          }
-          
+
         } catch ( \Exception $e ) {
-          
+
+          /* Rollback all transactions to prevent broken stuff. */
+          $wpdb->query( 'ROLLBACK' );
+          $wpdb->query( 'SET autocommit = 1;' );
+
           wp_send_json( array(
             'success' => false,
             'message' => '',
             'error' => $e->getMessage(),
           ) );
-          
+
         }
-        
+
+        /* Commit all transactions to Database and enable autocommit again. */
+        $wpdb->query( 'COMMIT' );
+        $wpdb->query( 'SET autocommit = 1;' );
+
+
+        /* Run callback if it set */
+        if( !empty( $request[ 'callback' ] ) && is_callable( $request[ 'callback' ] ) ) {
+          @call_user_func( $request[ 'callback' ], $request );
+        }
+
         wp_send_json( array(
           'success' => true,
           'message' => '',
           'error' => '',
+          'redirect_to' => ( !empty( $request[ 'redirect_to' ] ) ? urldecode( $request[ 'redirect_to' ] ) : false )
         ) );
       }
       
@@ -238,7 +269,7 @@ namespace UsabilityDynamics\MaestroConference {
        * 
        * MUST NOT BE USED DIRECTLY
        */
-      private function mc_is_valid_wpnonce( $hash ) {
+      private function is_valid_wpnonce( $hash ) {
         /* Cheating? Hah? */
         if( !is_user_logged_in() || empty( $hash ) ) {
           return false;
