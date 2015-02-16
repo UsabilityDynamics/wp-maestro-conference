@@ -60,7 +60,7 @@ namespace UsabilityDynamics\MaestroConference {
         global $paged;
         $paged++;
 
-        $is_available_page = apply_filters('mc_conferences_shortcode_pre', $atts );
+        $is_available_page = apply_filters('mc_conferences_shortcode_pre', true, $atts );
         if (!$is_available_page)
           return false;
 
@@ -100,6 +100,7 @@ namespace UsabilityDynamics\MaestroConference {
             'active' => __('Active', ud_get_wp_maestro_conference('domain')),
             'closed' => __('Closed', ud_get_wp_maestro_conference('domain')),
         ));
+
         $this->render( $data['template'], $data );
       }
 

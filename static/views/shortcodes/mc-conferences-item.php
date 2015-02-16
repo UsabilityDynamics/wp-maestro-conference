@@ -6,8 +6,6 @@
 $conference = ud_get_wp_maestro_conference()->get_conference_data($post->ID, OBJECT);
 $user_conference_data = ud_get_wp_maestro_conference()->get_user_conference_data($post->ID);
 ?>
-<link href="http://financialtherapynetwork.loc/wp-content/themes/twentyfourteen/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-<script src="http://financialtherapynetwork.loc/wp-content/themes/twentyfourteen/js/bootstrap.min.js"></script>
 <div class="col-md-8">
     <h2><?php the_title(); ?></h2>
     <p>
