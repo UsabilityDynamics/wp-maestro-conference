@@ -440,10 +440,10 @@ namespace UsabilityDynamics\MaestroConference {
        * @return array
        */
       static public function get_local_participants( $wp_conference_id ) {
-        $result = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', true);
-        $local_participants = array();
-        if ($result)
-          $local_participants = unserialize($result);
+        $local_participants = get_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', true);
+        if( !is_array( $local_participants ) ) {
+          $local_participants = array();
+        }
         return $local_participants;
       }
 

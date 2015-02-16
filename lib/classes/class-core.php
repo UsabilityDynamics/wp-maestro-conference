@@ -321,11 +321,10 @@ namespace UsabilityDynamics\MaestroConference {
         global $post;
         /*enqueue js script*/
         wp_enqueue_script('mc-admin', ud_get_wp_maestro_conference()->path('static/scripts/mc-admin.js'), array('jquery'));
-        
-        $participants = array();
-        $post_meta = get_post_meta($post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', true);
-        if ($post_meta) {
-          $participants = unserialize($post_meta);
+
+        $participants = get_post_meta($post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', true);
+        if( !is_array( $participants ) ) {
+          $participants = array();
         }
 
         echo $this->get_template_part('list_participants', array('participants' => $participants));
