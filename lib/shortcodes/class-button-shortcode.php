@@ -59,7 +59,11 @@ namespace UsabilityDynamics\MaestroConference {
             'template' => array(
               'name' => __( 'Template', ud_get_wp_maestro_conference('domain') ),
               'description' => __( 'Optional. If not set, default template\'s name is used.', ud_get_wp_maestro_conference('domain') ),
-            )
+            ),
+            'classes' => array(
+              'name' => __( 'CSS Classes', ud_get_wp_maestro_conference( 'domain' ) ),
+              'description' => __( 'Optional. Custom CSS classes.', ud_get_wp_maestro_conference( 'domain' ) ),
+            ),
           ),
           'description' => __( 'Renders Button to add/withdraw credits from balance. User must be logged in.', ud_get_wp_maestro_conference('domain') ),
           'group' => 'Maestro Conference',
@@ -88,6 +92,7 @@ namespace UsabilityDynamics\MaestroConference {
           'redirect_to' => '', // Optional
           'callback' => '', // Optional
           'template' => str_replace( '_', '-', $this->id ), // Optional
+          'classes' => '' // Optional
         ), $atts );
         
         /* Be sure that user is logged in */

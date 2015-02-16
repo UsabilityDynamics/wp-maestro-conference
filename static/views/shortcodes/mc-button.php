@@ -16,7 +16,8 @@
  *  wpnonce
  */
 
-printf( '<button class="btn button mc-button" data-wpnonce="%s" data-action="%s" data-conference_id="%s" data-send-mail="%s" data-extra="%s" data-callback="%s" data-success-label="%s" data-success-hide="%s" data-redirect-to="%s" >%s</button>',
+printf( '<button class="btn button mc-button %s" data-wpnonce="%s" data-action="%s" data-conference_id="%s" data-send-mail="%s" data-extra="%s" data-callback="%s" data-success-label="%s" data-success-hide="%s" data-redirect-to="%s" >%s</button>',
+  esc_attr( $classes ),
   esc_attr( $wpnonce ),
   esc_attr( $action ),
   esc_attr( $conference_id ),
