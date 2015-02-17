@@ -1,5 +1,6 @@
 !function($, s) {
     $('#mc_conferences_filter').change(function(){
+        console.log( 'WTF' );
         var e = $(this), data = {
             action: "mc_conferences_filter",
             mc_filter_field: $("option:selected", e).val(),
