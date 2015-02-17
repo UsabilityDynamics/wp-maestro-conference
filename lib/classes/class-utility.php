@@ -111,11 +111,9 @@ namespace UsabilityDynamics\MaestroConference {
           return false;
         }
         /* Add postmeta to result */
-        $result = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'participants', true);
-        $local_participants = array();
+        $local_participants = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'participants', true);
         $count_participants = 0;
-        if ($result) {
-          $local_participants = unserialize($result);
+        if ($local_participants) {
           foreach ($local_participants as $local_participant) {
             if (!empty($local_participant['wp_user_id'])) {
               $participants[] = get_user_by("id", $local_participant['wp_user_id']);

@@ -46,7 +46,47 @@ namespace UsabilityDynamics\MaestroConference {
           wp_schedule_event(time(), 'hourly', 'mc_synchronize_cron');
         }
         add_action('mc_synchronize_cron', 'synchronize_conference');
+		add_filter( 'manage_edit-maestro_conference_columns', array($this, 'set_custom_edit_book_columns') );
+        add_action( 'manage_maestro_conference_posts_custom_column' , array($this, 'custom_book_column'), 10, 2 );
       }
+	  
+	   /**
+       * Add custom columns to conference list
+       *
+       * @param array $columns Columns
+       */
+	  public function set_custom_edit_book_columns($columns) {
+
+        $new_columns = array(
+          'mc_active' => __('Active', ud_get_wp_maestro_conference('domain')),
+          'mc_status' => __('Status', ud_get_wp_maestro_conference('domain')),
+          'mc_scheduledStartDate' => __('Start date', ud_get_wp_maestro_conference('domain')),
+        );
+          return array_merge($columns, $new_columns);
+      }
+      
+	   /**
+       * Add values to custom columns
+       *
+       * @param string $column Current column
+	   * @param int $post_id Post ID
+       */
+      public function custom_book_column( $column, $post_id ) {
+        switch ( $column ) {
+        case 'mc_active' :
+          $conference_is_active = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'is_active', true);
+          echo ($conference_is_active == 1) ? "Yes" : "No";
+          break;
+        case 'mc_status' :
+          $conference_status = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'status', true);
+          echo $conference_status;
+          break;
+        case 'mc_scheduledStartDate' :
+          $conference_date = get_post_meta($post_id, ud_get_wp_maestro_conference('prefix') . 'scheduledStartDate', true);
+          echo $conference_date;
+          break;
+        }
+    }
 
       /**
        * Includes all PHP files from specific folder
