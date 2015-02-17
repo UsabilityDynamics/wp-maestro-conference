@@ -7,6 +7,7 @@
             offset: e.attr('data-offset'),
             per_page: e.attr('data-per_page')
         };
+
         $.ajax({
             type: "POST",
             url: s.admin_ajax,

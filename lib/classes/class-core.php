@@ -46,7 +46,7 @@ namespace UsabilityDynamics\MaestroConference {
           wp_schedule_event(time(), 'hourly', 'mc_synchronize_cron');
         }
         add_action('mc_synchronize_cron', 'synchronize_conference');
-		add_filter( 'manage_edit-maestro_conference_columns', array($this, 'set_custom_edit_book_columns') );
+		    add_filter( 'manage_edit-maestro_conference_columns', array($this, 'set_custom_edit_book_columns') );
         add_action( 'manage_maestro_conference_posts_custom_column' , array($this, 'custom_book_column'), 10, 2 );
       }
 	  
