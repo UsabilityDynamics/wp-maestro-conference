@@ -51,6 +51,7 @@ namespace UsabilityDynamics\MaestroConference {
 
         /* Hooks */
         add_action('wp_ajax_mc_conferences_filter', array($this, 'conferences_filter'));
+        add_action('wp_ajax_nopriv_mc_conferences_filter', array($this, 'conferences_filter'));
       }
 
       /**

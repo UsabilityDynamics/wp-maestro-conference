@@ -30,9 +30,6 @@ namespace UsabilityDynamics\MaestroConference {
         ));
 
         parent::__construct($options);
-
-        /* Hooks */
-        add_action('wp_ajax_mc_conference_filter', array($this, 'conference_filter'));
       }
 
       /**
