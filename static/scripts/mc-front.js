@@ -34,7 +34,11 @@
             dataType: "json",
             cache: !1,
             complete: function(r) {
-                $(".mc_conferences").html(r.responseText);
+                if( r.responseJSON.success ) {
+                    $('.mc_conferences').html(r.responseJSON.data.html);
+                } else {
+                    alert( 'Sorry, something went wrong! Please reload page and try again.' );
+                }
             }
         }), $("#mc_conferences").fadeIn(3e3, function() {});
     });

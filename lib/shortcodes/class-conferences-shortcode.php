@@ -24,8 +24,8 @@ namespace UsabilityDynamics\MaestroConference {
                 'user_id' => array(
                     'name' => __('User ID', ud_get_wp_maestro_conference('domain')),
                 ),
-                'offset' => array(
-                    'name' => __('Offset', ud_get_wp_maestro_conference('domain')),
+                'paged' => array(
+                    'name' => __('Page', ud_get_wp_maestro_conference('domain')),
                 ),
                 'status' => array(
                     'name' => __('Status conference', ud_get_wp_maestro_conference('domain')),
@@ -59,7 +59,8 @@ namespace UsabilityDynamics\MaestroConference {
        */
       public function call( $atts = "" ) {
         global $paged;
-        $paged++;
+
+        if(!$paged) $paged = 1;
 
         $is_available_page = apply_filters('mc_conferences_shortcode_pre', true, $atts );
         if (!$is_available_page)
@@ -68,7 +69,7 @@ namespace UsabilityDynamics\MaestroConference {
         $data = shortcode_atts( apply_filters( 'mc_conferences_shortcode_pre_call', array(
             'user_id' => '',
             'per_page' => '25',
-            'offset' => '0',
+            'paged' => $paged,
             'status' => '',            
             'template' => str_replace('_', '-', $this->id),
         ), $atts ), $atts );
@@ -77,8 +78,7 @@ namespace UsabilityDynamics\MaestroConference {
                 apply_filters('mc_conferences_shortcode_call', array(
             'user_id' => $data['user_id'],
             'posts_per_page' => $data['per_page'],
-            'offset' => $data['offset'],
-            'paged' => $paged,
+            'paged' => $data[ 'paged' ],
             'status' => $data['status']
                         ), $atts)
         );
@@ -124,24 +124,25 @@ namespace UsabilityDynamics\MaestroConference {
         $data = shortcode_atts(apply_filters('mc_conferences_shortcode_pre_ajax', array(
             'user_id' => '',
             'per_page' => '25',
-            'offset' => '0',
             'status' => '',
-            'paged' => '0',
+            'paged' => '1',
             'template' => str_replace('_', '-', $this->id),
                 ), $request), $request);
 
         if (in_array($request['mc_filter_field'], array('active', 'closed'))) {
           $data['status'] = $request['mc_filter_field'];
         }
-        $data['posts'] = ud_get_wp_maestro_conference()->get_conferences(
-                apply_filters('mc_conferences_shortcode_ajax', array(
-            'user_id' => $data['user_id'],
-            'posts_per_page' => $data['per_page'],
-            'offset' => $data['offset'],
-            'paged' => $data['paged'],
-            'status' => $data['status']
-                        ), $request)
-        );
+
+        $query = apply_filters('mc_conferences_shortcode_ajax', array(
+          'user_id' => $data['user_id'],
+          'posts_per_page' => $data['per_page'],
+          'offset' => $data['offset'],
+          'paged' => $data['paged'],
+          'status' => $data['status']
+        ), $request);
+
+        $data['posts'] = ud_get_wp_maestro_conference()->get_conferences( $query );
+
         $args = array(
             'base' => '/conferences/page/%#%/',
             'format' => '#',
@@ -151,7 +152,17 @@ namespace UsabilityDynamics\MaestroConference {
         $data['pagination'] = paginate_links( $args );
         
         $data['is_ajax'] = true;
+
+        ob_start();
         $this->render( $data['template'], $data );
+        $html = ob_get_clean();
+
+        wp_send_json_success( array(
+          'total' => count( $data['posts']->posts ),
+          'query' => $query,
+          'html' => $html,
+        ) );
+
         exit();
       }
 
