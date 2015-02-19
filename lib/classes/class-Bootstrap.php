@@ -88,8 +88,13 @@ namespace UsabilityDynamics\MaestroConference {
             'mc_pre_registration' => __('Pre-registration', $this->domain),
             'mc_customer_uid' => __('Customer UID', $this->domain),
             'mc_security_token' => __('Security Token', $this->domain),
-            'mc_conference_unique_id' => __('Conference unique ID', $this->domain)
-                ));
+            'mc_conference_unique_id' => __('Conference unique ID', $this->domain),
+            'mc_general' => __('General', $this->domain),
+            'mc_settings' => __('Settings', $this->domain),
+            'mc_settings_desc' => __('General Settings', $this->domain),
+            'mc_page_overview' => __('Overview Page', $this->domain),
+            'mc_page_overview_desc' => __('Unique ID of Conferences Overview page.', $this->domain),
+        ));
       }
 
       /**

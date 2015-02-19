@@ -141,6 +141,7 @@
           "conference_uid": ""
         },
         "conference": {
+          "overview": "",
           "reg_is_enabled": "true",
           "reg_is_disabled_for_nonlogged_users": "true",
           "user_can_cancel_reg": "true",
@@ -161,6 +162,11 @@
             "id": "api",
             "name": "l10n.mc_api",
             "desc": "l10n.mc_api_credentials"
+          },
+          "settings": {
+            "id": "settings",
+            "name": "l10n.mc_settings",
+            "desc": "l10n.mc_settings_desc"
           }
         },
         "sections": {
@@ -168,6 +174,11 @@
             "id": "credentials",
             "name": "l10n.mc_credentials",
             "menu": "api"
+          },
+          "general": {
+            "id": "general",
+            "name": "l10n.mc_general",
+            "menu": "settings"
           }
         },
         "fields": [
@@ -185,6 +196,12 @@
             "id": "api.conference_uid",
             "name": "l10n.mc_conference_unique_id",
             "section": "credentials"
+          },
+          {
+            "id": "conference.overview",
+            "name": "l10n.mc_page_overview",
+            "section": "general",
+            "desc": "l10n.mc_page_overview_desc"
           }
         ]
       }
