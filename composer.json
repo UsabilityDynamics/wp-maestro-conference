@@ -94,7 +94,8 @@
               "supports": [
                 "title",
                 "editor",
-                "excerpt"
+                "excerpt",
+                "comments"
               ],
               "can_export": true
             },
