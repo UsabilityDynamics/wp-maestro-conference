@@ -285,7 +285,7 @@ namespace UsabilityDynamics\MaestroConference {
               }
 
               add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
-              add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
+              add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, time() );
               $local_participants[$key]['wp_user_id'] = $user_id;
               update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants);
 
@@ -391,7 +391,7 @@ namespace UsabilityDynamics\MaestroConference {
               $local_participants[$key]['name'] = 'Empty';
               update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants);
               delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
-              delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, '1');
+              delete_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id );
 
             }
 
