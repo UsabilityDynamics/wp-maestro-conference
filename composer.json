@@ -60,8 +60,8 @@
       },
       "model": {
         "types": {
-          "maestro_conference": {
-            "key": "maestro_conference",
+          "mconference": {
+            "key": "mconference",
             "data": {
               "capability_type": "page",
               "label": "Conferences",
@@ -151,7 +151,7 @@
           "secondary_menu": {
             "page_title": "l10n.maestro_conference_page_title",
             "menu_title": "l10n.maestro_conference_settings",
-            "parent_slug": "edit.php?post_type=maestro_conference",
+            "parent_slug": "edit.php?post_type=mconference",
             "menu_slug": "maestro_conferences_settings"
           }
         },

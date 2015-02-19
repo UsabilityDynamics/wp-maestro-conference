@@ -131,7 +131,7 @@ namespace UsabilityDynamics\MaestroConference {
                 'version' => $this->args['version'],
                 'domain' => $this->domain,
                 'prefix' => 'mc_',
-                'conference_type' => 'maestro_conference',
+                'conference_type' => 'mconference',
             )
                 ));
 

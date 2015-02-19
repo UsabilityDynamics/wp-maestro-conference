@@ -198,7 +198,7 @@ namespace UsabilityDynamics\MaestroConference {
        */
       public function get_nearest_conference() {
         $query_string = array(
-            'post_type' => 'maestro_conference',
+            'post_type' => 'mconference',
             'posts_per_page' => '1',
             'orderby' => 'post_date',
             'order' => 'DESC',
@@ -232,7 +232,7 @@ namespace UsabilityDynamics\MaestroConference {
        */
       static public function get_current_active_conference() {
         $query_string = array(
-            'post_type' => 'maestro_conference',
+            'post_type' => 'mconference',
             'posts_per_page' => '1',
             'meta_query' => array(
                 array(
@@ -260,7 +260,7 @@ namespace UsabilityDynamics\MaestroConference {
        */
       static public function check_nearest_conferences_by_date($date, $current_conference_id) {
         $query_string = array(
-            'post_type' => 'maestro_conference',
+            'post_type' => 'mconference',
             'posts_per_page' => '1',
             'post__not_in' => array($current_conference_id),
             'meta_query' => array(
@@ -349,7 +349,7 @@ namespace UsabilityDynamics\MaestroConference {
        * @return void
        */
       function add_meta_boxes() {
-        add_meta_box( 'mc_callers', __('Participants', ud_get_wp_maestro_conference('domain')), array($this, 'show_metabox'), 'maestro_conference', 'normal', 'high' );
+        add_meta_box( 'mc_callers', __('Participants', ud_get_wp_maestro_conference('domain')), array($this, 'show_metabox'), 'mconference', 'normal', 'high' );
       }
 
       /**
