@@ -111,14 +111,14 @@ namespace UsabilityDynamics\MaestroConference {
       public function conferences_filter() {
         $request = $_REQUEST;
 
-        if ($request['paged'] != '0') {
-          $link = explode("/", $request['paged']);
-          if (is_array($link))
-            $request['paged'] = $link[count($link)-2];
+        if( !isset( $request[ 'paged' ] ) || $request[ 'paged' ] == '0' ) {
+          $request['paged'] = '1';
+        } elseif ( !is_numeric( $request['paged'] ) ) {
+          $link = explode("/", trim( $request['paged'], '\/' ));
+          if (is_array($link) && strpos($link[count($link)-2], 'page') !== false && is_numeric($link[count($link)-1]))
+            $request['paged'] = $link[count($link)-1];
           else
             $request['paged'] = 1;
-        } else {
-          $request['paged']++;
         }
 
         $data = shortcode_atts(apply_filters('mc_conferences_shortcode_pre_ajax', array(
@@ -138,7 +138,8 @@ namespace UsabilityDynamics\MaestroConference {
           'posts_per_page' => $data['per_page'],
           'offset' => $data['offset'],
           'paged' => $data['paged'],
-          'status' => $data['status']
+          'status' => $data['status'],
+          'post_status' => 'publish'
         ), $request);
 
         $data['posts'] = ud_get_wp_maestro_conference()->get_conferences( $query );
