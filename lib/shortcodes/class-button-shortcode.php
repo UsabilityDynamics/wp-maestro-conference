@@ -54,7 +54,7 @@ namespace UsabilityDynamics\MaestroConference {
             ),
             'redirect_to' => array(
               'name' => __( 'Redirect To URL', ud_get_wp_maestro_conference( 'domain' ) ),
-              'description' => __( 'Optional. Redirects to specific url on success.', ud_get_wpi_wallet( 'domain' ) ),
+              'description' => __( 'Optional. Redirects to specific url on success.', ud_get_wp_maestro_conference( 'domain' ) ),
             ),
             'template' => array(
               'name' => __( 'Template', ud_get_wp_maestro_conference('domain') ),

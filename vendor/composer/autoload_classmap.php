@@ -45,4 +45,9 @@ return array(
     'UsabilityDynamics\\WP\\TGM_Bulk_Installer' => $vendorDir . '/usabilitydynamics/lib-wp-bootstrap/lib/classes/class-tgm-bulk-installer.php',
     'UsabilityDynamics\\WP\\TGM_Bulk_Installer_Skin' => $vendorDir . '/usabilitydynamics/lib-wp-bootstrap/lib/classes/class-tgm-bulk-installer.php',
     'UsabilityDynamics\\WP\\TGM_Plugin_Activation' => $vendorDir . '/usabilitydynamics/lib-wp-bootstrap/lib/classes/class-tgm-plugin-activation.php',
+    'UsabilityDynamics\\Shortcode\\Bootstrap' => $vendorDir . '/usabilitydynamics/lib-wp-shortcode/lib/class-bootstrap.php',
+    'UsabilityDynamics\\Shortcode\\Manager' => $vendorDir . '/usabilitydynamics/lib-wp-shortcode/lib/class-manager.php',
+    'UsabilityDynamics\\Shortcode\\Shortcode' => $vendorDir . '/usabilitydynamics/lib-wp-shortcode/lib/class-shortcode.php',
+    'UsabilityDynamics\\Shortcode\\UI' => $vendorDir . '/usabilitydynamics/lib-wp-shortcode/lib/class-ui.php',
+    'UsabilityDynamics\\Shortcode\\Utility' => $vendorDir . '/usabilitydynamics/lib-wp-shortcode/lib/class-utility.php',
 );

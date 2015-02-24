@@ -114,6 +114,10 @@ namespace UsabilityDynamics\MaestroConference {
         if( !isset( $request[ 'paged' ] ) || $request[ 'paged' ] == '0' ) {
           $request['paged'] = '1';
         } elseif ( !is_numeric( $request['paged'] ) ) {
+
+
+          $s = get_query_var( 'paged' );
+
           $link = explode("/", trim( $request['paged'], '\/' ));
           if (is_array($link) && strpos($link[count($link)-2], 'page') !== false && is_numeric($link[count($link)-1]))
             $request['paged'] = $link[count($link)-1];
