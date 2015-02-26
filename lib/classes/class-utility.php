@@ -215,7 +215,7 @@ namespace UsabilityDynamics\MaestroConference {
 
         $args = wp_parse_args( $args, array(
           'user_id' => get_current_user_id(),
-          'wp_onference_id' => false, // Required
+          'wp_conference_id' => false, // Required
           'send_mail' => 'false',
           'force_autocommit' => false,
         ) );
