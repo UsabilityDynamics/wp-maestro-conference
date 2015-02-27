@@ -12,15 +12,6 @@ namespace UsabilityDynamics\MaestroConference {
 
     class Utility {
 
-      /**
-       * Get Conference object
-       *
-       * @return object
-       */
-      static public function get_conference($the_conference = false, $args = array()) {
-        return Conference_Factory::get_conference($the_conference, $args);
-      }
-
       /*
        * Change value 0/1 to false/true for maestroconference API
        */
