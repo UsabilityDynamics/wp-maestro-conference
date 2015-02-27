@@ -78,9 +78,9 @@ if (!class_exists('UsabilityDynamics\MaestroConference\UI')) {
        *
        */
       public function admin_menu() {
-        if (has_action('load-maestro_conference_page_maestro_conferences_settings', array($this->ui, 'request'))) {
-          remove_action('load-maestro_conference_page_maestro_conferences_settings', array($this->ui, 'request'));
-          add_action('load-maestro_conference_page_maestro_conferences_settings', array($this, 'request'));
+        if (has_action('load-mconference_page_maestro_conferences_settings', array($this->ui, 'request'))) {
+          remove_action('load-mconference_page_maestro_conferences_settings', array($this->ui, 'request'));
+          add_action('load-mconference_page_maestro_conferences_settings', array($this, 'request'));
         }
       }
 
@@ -114,7 +114,7 @@ if (!class_exists('UsabilityDynamics\MaestroConference\UI')) {
 
         $screen = get_current_screen();
 
-        if ($screen->id !== 'maestro_conference_page_maestro_conferences_settings') {
+        if ($screen->id !== 'mconference_page_maestro_conferences_settings') {
           return false;
         }
         $hook = current_filter();
