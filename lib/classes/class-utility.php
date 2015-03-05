@@ -91,8 +91,6 @@ namespace UsabilityDynamics\MaestroConference {
         return $conference;
       }
 
-      //static publuc function get_
-
       /**
        * Returns Conference data object
        *
