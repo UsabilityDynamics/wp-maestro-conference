@@ -115,14 +115,21 @@ namespace UsabilityDynamics\MaestroConference {
        * @return string
        */
       public function synchronize_conference() {
+        global $wpdb;
+
+        /**
+         * Close All conferences which already finished.
+         */
+        self::close_finished_conferences();
+
         $conference = self::get_nearest_conference();
-        
-        if ( $conference->post && is_object( $this->instance->client ) ) {
-          $current_active_conference = self::get_current_active_conference();
-          if ($current_active_conference->post) {
-            update_post_meta($current_active_conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0');
-            update_post_meta($current_active_conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'status', 'closed');
-          }
+
+        if ( !empty( $conference->post ) && is_object( $this->instance->client ) ) {
+
+          /* Disable autocommit to Database to prevent synchronization. */
+          $wpdb->query( 'SET autocommit = 0;' );
+          $wpdb->query( 'START TRANSACTION;' );
+
           update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '1');
 
           try {
@@ -134,7 +141,7 @@ namespace UsabilityDynamics\MaestroConference {
             }
 
             /* Removing old callers from conference */
-            if (isset($mc_conference['response']['value']['person'])) {
+            if (!empty($mc_conference['response']['value']['person'])) {
               foreach ($mc_conference['response']['value']['person'] as $person) {
                 if ($person['role'] == 'PARTICIPANT') {
                   $response = $this->instance->client->removePerson($this->instance->get('api.conference_uid'), $person['UID']);
@@ -181,12 +188,50 @@ namespace UsabilityDynamics\MaestroConference {
             add_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', $persons, true);
 
           } catch (\Exception $e) {
-            update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0');
-            /* Add error notice */
-            //Add error to log ???
+
+            /* Rollback all transactions to prevent broken orders, order items, etc. */
+            $wpdb->query( 'ROLLBACK' );
+            $wpdb->query( 'SET autocommit = 1;' );
+
+            /* @TODO: Add error notice */
+
             return false;
           }
+
+          /* Commit all transactions to Database and enable autocommit again. */
+          $wpdb->query( 'COMMIT' );
+          $wpdb->query( 'SET autocommit = 1;' );
+
         }
+      }
+
+      /**
+       * Close all conferences which already done.
+       * Conference should be started more then 6 hours ago
+       *
+       */
+      public function close_finished_conferences() {
+        global $wpdb;
+
+        $conferences = $wpdb->get_results( "
+          SELECT pm1.post_id AS ID, pm2.meta_value AS start_date
+            FROM {$wpdb->postmeta} AS pm1
+            LEFT JOIN {$wpdb->postmeta} AS pm2 ON pm2.post_id = pm1.post_id
+            WHERE pm1.meta_key = 'mc_status'
+              AND pm1.meta_value = 'active'
+              AND pm2.meta_key = 'mc_scheduledStartDate'
+        ", ARRAY_A );
+
+        $timestamp = time() - ( 6 * 3600 );
+        foreach( $conferences as $conference ) {
+
+          if( strtotime( $conference[ 'start_date' ] ) <= $timestamp ) {
+            update_post_meta( $conference[ 'ID' ], 'mc_status', 'closed' );
+            update_post_meta( $conference[ 'ID' ], 'mc_is_active', '0' );
+          }
+
+        }
+
       }
 
       /**
@@ -394,7 +439,7 @@ namespace UsabilityDynamics\MaestroConference {
               add_post_meta($post_ID, ud_get_wp_maestro_conference('prefix') . 'is_active', '0', true);
               return $post_ID;
             }
-          } else {
+          } elseif ( isset( $_POST['mc_scheduledStartDate'] ) ) {
             self::return_error($post_ID);
           }
         }
