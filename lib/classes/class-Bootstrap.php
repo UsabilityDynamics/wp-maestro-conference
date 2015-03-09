@@ -53,6 +53,9 @@ namespace UsabilityDynamics\MaestroConference {
           $this->client = new Client($customer, $auth_key);
         }
         $this->core = new Core();
+
+        $this->cron = new Cron();
+
       }
 
       /**

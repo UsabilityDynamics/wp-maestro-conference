@@ -35,19 +35,15 @@ namespace UsabilityDynamics\MaestroConference {
          * Setup setting for plugin on admin panel
          */
         $this->ui = new UI();
+
         /* Hooks */
         add_action('save_post', array($this, 'save_conference'), 99, 3);
         add_action('admin_notices', array($this, 'error_notice'));
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
-        if (isset($_GET['debug']) && $_GET['debug'] == true && isset($_GET['synchronize']) && $_GET['synchronize'] == true) {
-          self::synchronize_conference();
-        }
-        if (!wp_next_scheduled('mc_synchronize_cron')) {
-          wp_schedule_event(time(), 'hourly', 'mc_synchronize_cron');
-        }
-        add_action('mc_synchronize_cron', 'synchronize_conference');
+
 		    add_filter( 'manage_edit-mconference_columns', array($this, 'set_custom_edit_book_columns') );
         add_action( 'manage_mconference_posts_custom_column' , array($this, 'custom_book_column'), 10, 2 );
+
       }
 	  
 	   /**

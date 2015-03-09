@@ -142,10 +142,10 @@
         },
         "conference": {
           "overview": "",
-          "reg_is_enabled": "true",
-          "reg_is_disabled_for_nonlogged_users": "true",
-          "user_can_cancel_reg": "true",
           "cancel_reg_max_time": "24"
+        },
+        "cron": {
+          "type": "shell"
         }
       },
       "ui": {
