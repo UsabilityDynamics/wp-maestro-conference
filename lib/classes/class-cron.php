@@ -4,7 +4,7 @@
  *
  * @since 5.0.0
  */
-namespace UsabilityDynamics\WPP {
+namespace UsabilityDynamics\MaestroConference {
 
   if( !class_exists( 'UsabilityDynamics\MaestroConference\Cron' ) ) {
 
@@ -56,6 +56,8 @@ namespace UsabilityDynamics\WPP {
        * @author peshkov@UD
        */
       public function spawn_cron() {
+
+        return;
 
         $request = ud_get_wp_maestro_conference( 'cron.type' );
 
