@@ -154,6 +154,7 @@ namespace UsabilityDynamics\MaestroConference {
 
             /* Adding new callers from our DB */
             $local_participants = Utility::get_local_participants($conference->post->ID);
+
             $count_local_participants = 0;
             if (!empty($local_participants)) {
               foreach ($local_participants as $local_participant) {
@@ -169,23 +170,26 @@ namespace UsabilityDynamics\MaestroConference {
               }
             }
 
-            /* if our callers < 24 - adding fake users */
-            if ($count_local_participants < 24) {
-              for ($i = 0; $i < (24 - $count_local_participants); $i++) {
+            /* if our callers < 23 - adding fake users */
+            if ($count_local_participants < 23) {
+              for ($i = 0; $i < (23 - $count_local_participants); $i++) {
                 $response = self::_cron_add_fake_user_to_conference($conference->post->ID);
                 if ($response['code'] != 0) {
                   throw new \Exception(__($response['message'], ud_get_wp_maestro_conference('domain')));
                 }
-                $response['value']['wp_user_id'] = '';
-                $persons[] = $response['value'];
+                if(
+                  !empty( $response[ 'value' ][ 'PIN' ] ) &&
+                  !empty( $response[ 'value' ][ 'callInNumber' ] )
+                ) {
+                  $persons[] = array_merge( array(
+                    'wp_user_id' => '',
+                  ), $response['value'] );
+                }
               }
             }
 
-            /* remove callers in our conference */
-            delete_post_meta( $conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants' );
-
             //adding updated callers to our DB
-            add_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', $persons, true);
+            update_post_meta($conference->post->ID, ud_get_wp_maestro_conference('prefix') . 'participants', $persons );
 
           } catch (\Exception $e) {
 
@@ -347,7 +351,9 @@ namespace UsabilityDynamics\MaestroConference {
             apply_filters('error_cron_add_person_conference', $user_id);
             return $response['message'];
           }
-          add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_PIN_' . $wp_conference_id, $response['value']['PIN'], true);
+
+          update_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_PIN_' . $wp_conference_id, $response['value']['PIN'] );
+          update_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_phone_' . $wp_conference_id, $response['value']['callInNumber'] );
           //add notification to user
           do_action('after_add_person_conference', $user);
           return $response;
@@ -376,15 +382,20 @@ namespace UsabilityDynamics\MaestroConference {
           $response = $result['response'];
           if ($response['code'] != 0) {
             apply_filters('error_cron_add_fake_user_conference', $user_id);
-            return $response['message'];
+            $response = array(
+              'code' => '-1',
+              'message' => $response['message'],
+              'value' => array()
+            );
           }
           return $response;
-        }
-        $response = array(
+        } else {
+          $response = array(
             'code' => '-1',
             'message' => 'Conference is not active',
             'value' => array()
-        );
+          );
+        }
         return $response;
       }
 
@@ -431,7 +442,7 @@ namespace UsabilityDynamics\MaestroConference {
               self::return_error($post_ID);
             } else {
               $local_participants = array();
-              for ($i = 0; $i < 24; $i++) {
+              for ($i = 0; $i < 23; $i++) {
                 $local_participants[$i]['wp_user_id'] = '';
                 $local_participants[$i]['name'] = __('Empty', ud_get_wp_maestro_conference('domain'));
               }

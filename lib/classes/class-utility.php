@@ -266,8 +266,8 @@ namespace UsabilityDynamics\MaestroConference {
                 }
 
                 $local_participants[$key] = $response['value'];
-                add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_PIN_' . $wp_conference_id, $response['value']['PIN'], true);
-                add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_phone_' . $wp_conference_id, $response['value']['callInNumber'], true);
+                update_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_PIN_' . $wp_conference_id, $response['value']['PIN'], true);
+                update_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_phone_' . $wp_conference_id, $response['value']['callInNumber'], true);
 
               } else {
 
@@ -276,7 +276,7 @@ namespace UsabilityDynamics\MaestroConference {
               }
 
               add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference', $wp_conference_id);
-              add_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, time() );
+              update_user_meta($user_id, ud_get_wp_maestro_conference('prefix') . 'conference_'.$wp_conference_id, time() );
               $local_participants[$key]['wp_user_id'] = $user_id;
               update_post_meta($wp_conference_id, ud_get_wp_maestro_conference('prefix') . 'participants', $local_participants);
 
