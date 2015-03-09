@@ -145,7 +145,7 @@
           "cancel_reg_max_time": "24"
         },
         "cron": {
-          "type": "shell"
+          "type": "http"
         }
       },
       "ui": {

@@ -192,6 +192,7 @@ namespace UsabilityDynamics\MaestroConference {
             /* Rollback all transactions to prevent broken orders, order items, etc. */
             $wpdb->query( 'ROLLBACK' );
             $wpdb->query( 'SET autocommit = 1;' );
+            delete_transient( 'mc_doing_cron' );
 
             /* @TODO: Add error notice */
 
@@ -201,6 +202,7 @@ namespace UsabilityDynamics\MaestroConference {
           /* Commit all transactions to Database and enable autocommit again. */
           $wpdb->query( 'COMMIT' );
           $wpdb->query( 'SET autocommit = 1;' );
+          delete_transient( 'mc_doing_cron' );
 
         }
       }
